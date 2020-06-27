@@ -97,7 +97,7 @@ export class Visual implements IVisual {
             .append('svg')
             .classed('navigator', true);
 
-        let defs = this.svg.append("defs");
+        // let defs = this.svg.append("defs");
         this.container = this.svg.append("g")
             .classed('container', true);
     }

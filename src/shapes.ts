@@ -135,8 +135,9 @@ export class Parallelogram extends Shape implements Shape{
         return handles
     }
     static getAlterHPadding(height: number, angle: number): number{
-        
-        return -1 * (Parallelogram._z || height / Math.tan(height * (Math.PI / 180)))
+        if(this.handleFocused)
+            return -1 * Parallelogram._z
+        return -1 * height / Math.tan(height * (Math.PI / 180))
     }
 }
 
@@ -275,8 +276,9 @@ export class Chevron extends Shape implements Shape{
         return handles
     }
     static getAlterHPadding(height: number, angle: number): number{
-        console.log("inside...", height, angle, Chevron._z, (0.5 * height) / Math.tan(angle * (Math.PI / 180)))
-        return -1 * (Chevron._z || (0.5 * height) / Math.tan(angle * (Math.PI / 180)))
+        if(this.handleFocused)
+            return -1*Chevron._z
+        return -1 *(0.5 * height) / Math.tan(angle * (Math.PI / 180))
     }
 }
 

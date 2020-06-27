@@ -1,10 +1,7 @@
-import powerbi from "powerbi-visuals-api";
-
-import IViewport = powerbi.IViewport;
-
+import {Viewport} from './interfaces'
 import {FormatSettings} from './FormatSettings'
 import {TileData} from './TileData'
-import {State, TileSizingType, TileLayoutType, AlignmentType, TileShape} from './enums'
+import {State, TileSizingType, TileLayoutType, AlignmentType, TileShape, Direction} from './enums'
 import { Shape, Rectangle, Parallelogram, Chevron, Ellipse, Pentagon, Hexagon, Tab_RoundedCorners, Tab_CutCorners, Tab_CutCorner, ChevronVertical, ParallelogramVertical } from "../shapes"
 export class Tile {
     i: number;
@@ -17,7 +14,7 @@ export class Tile {
     }
     //Format Settings
 
-    get viewport(): IViewport{
+    get viewport(): Viewport{
         return this.formatSettings.viewport 
     }
     get viewportWidth(): number {
@@ -25,6 +22,12 @@ export class Tile {
     }
     get viewportHeight(): number {
         return this.viewport.height
+    }
+    get containerWidth(): number {
+        return this.viewportWidth - this.effectSpace
+    }
+    get containerHeight(): number {
+        return this.viewportHeight - this.effectSpace
     }
     
     get n(): number {
@@ -73,9 +76,7 @@ export class Tile {
         return this.formatSettings.layout.padding
     }
     get tileHPadding(): number {
-        console.log(this.alterHorizontalPadding)
-        return this.tilePadding 
-        + this.alterHorizontalPadding
+        return this.tilePadding + this.alterHorizontalPadding
     }
     get totalTileHPadding(): number {
         return this.tileHPadding * (this.rowLength - 1)
@@ -90,19 +91,19 @@ export class Tile {
     get tileWidth(): number {
         switch (this.formatSettings.layout.sizingMethod) {
             case TileSizingType.uniform:
-                return (this.viewportWidth - this.totalTileHPadding) / (this.rowLength)
+                return (this.containerWidth - this.totalTileHPadding) / (this.rowLength)
             case TileSizingType.fixed:
                 return this.formatSettings.layout.tileWidth
             // case TileSizingType.dynamic:
             //     let tileWidthScaleFactor = (this.inlineTextWidth / this.allTextWidth) * this.rowLength
-            //     return ((this.viewportWidth - this.tileHPadding * (this.rowLength - 1)) / (this.rowLength)) * tileWidthScaleFactor
+            //     return ((this.containerWidth - this.tileHPadding * (this.rowLength - 1)) / (this.rowLength)) * tileWidthScaleFactor
         }
     }
     get tileHeight(): number {
         
         if(this.formatSettings.layout.sizingMethod == TileSizingType.fixed)
             return this.formatSettings.layout.tileHeight
-        return (this.viewportHeight - this.totalTileVPadding) / this.numRows
+        return (this.containerHeight - this.totalTileVPadding) / this.numRows
 
     }
 
@@ -110,7 +111,7 @@ export class Tile {
         switch (this.formatSettings.layout.sizingMethod) {
             case TileSizingType.fixed:
                 let areaTaken = this.tilesInRow * this.tileWidth + (this.tilesInRow - 1) * this.tileHPadding
-                let areaRemaining = this.viewportWidth - areaTaken
+                let areaRemaining = this.containerWidth - areaTaken
                 switch (this.formatSettings.layout.tileAlignment) {
                     case AlignmentType.left:
                         return this.indexInRow * (this.tileWidth + this.tileHPadding) + this.effectSpace / 2
@@ -189,10 +190,78 @@ export class Tile {
     get shapeRoundedCornerRadius(): number{
         return 0
     }
+
     get effectSpace(): number {
-        return 0
-        // return Math.max(this.shadowSpace, this.glowSpace, this.tileStrokeWidth)
+        return Math.max(this.shadowSpace, this.glowSpace, this.tileStrokeWidth)
     }
+    get filter(): string {
+        return "url(#filter" + this.i + ")"
+    }
+
+    get shadow(): boolean{
+        return this.formatSettings.effect.shadow
+    }
+    get shadowColor(): string {
+        return this.getMatchingStateProperty(this.formatSettings.effect, 'shadowColor')
+    }
+    get shadowTransparency(): number {
+        return 1 - this.getMatchingStateProperty(this.formatSettings.effect, 'shadowTransparency') / 100
+    }
+    get shadowDistance(): number {
+        return this.getMatchingStateProperty(this.formatSettings.effect, 'shadowDistance')
+    }
+    get shadowMaxDistance(): number {
+        return Math.max(this.formatSettings.effect.shadowDistanceS, this.formatSettings.effect.shadowDistanceU, this.formatSettings.effect.shadowDistanceH)
+    }
+    get shadowStrength(): number {
+        return this.getMatchingStateProperty(this.formatSettings.effect, 'shadowStrength')
+    }
+    get shadowMaxStrength(): number {
+        return Math.max(this.formatSettings.effect.shadowStrengthS, this.formatSettings.effect.shadowStrengthU, this.formatSettings.effect.shadowStrengthH)
+    }
+    get shadowDirection(): Direction {
+        return this.getMatchingStateProperty(this.formatSettings.effect, 'shadowDirection')
+    }
+    get shadowDirectionCoords(): { x: number, y: number } {
+        switch (this.shadowDirection) {
+            case Direction.bottom_right: return { x: 1, y: 1 }
+            case Direction.bottom: return { x: 0, y: 1 }
+            case Direction.bottom_left: return { x: -1, y: 1 }
+            case Direction.left: return { x: -1, y: 0 }
+            case Direction.center: return { x: 0, y: 0 }
+            case Direction.top_left: return { x: -1, y: -1 }
+            case Direction.top: return { x: 0, y: -1 }
+            case Direction.top_right: return { x: 1, y: -1 }
+            case Direction.right: return { x: 1, y: 0 }
+            case Direction.custom: return { x: 0, y: 0 }
+        }
+    }
+    get shadowSpace(): number {
+        return this.shadow ? 3 * (this.shadowMaxDistance + this.shadowMaxStrength) : 0
+    }
+
+    get glow(): boolean{
+        return this.formatSettings.effect.glow
+    }
+    get glowColor(): string {
+        return this.getMatchingStateProperty(this.formatSettings.effect, 'glowColor')
+    }
+    get glowTransparency(): number {
+        return 1 - this.getMatchingStateProperty(this.formatSettings.effect, 'glowTransparency') / 100
+    }
+    get glowStrength(): number {
+        return this.getMatchingStateProperty(this.formatSettings.effect, 'glowStrength')
+    }
+    get glowMaxStrength(): number {
+        return Math.max(this.formatSettings.effect.glowStrengthS, this.formatSettings.effect.glowStrengthU, this.formatSettings.effect.glowStrengthH)
+    }
+    get glowSpace(): number {
+        return this.formatSettings.effect.glow ? 3 * (this.glowMaxStrength) : 0
+    }
+    
+
+
+
 
 
     //Tile data
