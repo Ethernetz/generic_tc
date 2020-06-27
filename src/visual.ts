@@ -60,6 +60,9 @@ import { select, merge } from "d3";
 
 import { styleTitleFO, styleTitleTable, styleTitleTableCell, constructTitleFamily, styleFrameFill, styleFrameStroke, addHandles, constructFrameFamily, styleTextArea, resizeCoverTitleElements, sizeTextContainer, makeTextTransparent, styleText } from './d3calls'
 
+
+import {TilesCollection, ShapesCollection} from './TilesCollection/TilesCollection'
+
 export class Visual implements IVisual {
     private target: HTMLElement;
     private selectionManager: ISelectionManager;
@@ -206,17 +209,33 @@ export class Visual implements IVisual {
     public update(options: VisualUpdateOptions) {
         if (!(options && options.dataViews && options.dataViews[0]))
             return
+            this.svg
+            .style('width', options.viewport.width)
+            .style('height', options.viewport.height)
+
+
+        let shapesCollection = new ShapesCollection()
+        shapesCollection.container = this.container
+        shapesCollection.viewport = options.viewport
+        
+
         this.visualSettings = VisualSettings.parse(options.dataViews[0]) as VisualSettings
-        let objects: powerbi.VisualObjectInstancesToPersist = getObjectsToPersist(this.visualSettings)
-        if (objects.merge.length != 0)
-            this.host.persistProperties(objects);
-
-
-        this.datapoints = []
         let dataView = options.dataViews[0]
         let categories: powerbi.DataViewCategoryColumn[] = dataView.categorical.categories;
-        let measures: powerbi.DataViewValueColumn[] = dataView.categorical.values
-        switch (this.visualSettings.content.source) {
+        for (let categoryIndex = 0; categoryIndex < categories[0].values.length; categoryIndex++) {
+            let pageValue: powerbi.PrimitiveValue = categories[0].values[categoryIndex];
+            shapesCollection.tilesData.push({
+                text: pageValue.toString()
+            });
+        }
+
+        console.log("about to call rendre...")
+        shapesCollection.render()
+
+        // let objects: powerbi.VisualObjectInstancesToPersist = getObjectsToPersist(this.visualSettings)
+        // if (objects.merge.length != 0)
+        //     this.host.persistProperties(objects);
+        /*switch (this.visualSettings.content.source) {
             case enums.Content_Source.databound:
                 for (let categoryIndex = 0; categoryIndex < categories[0].values.length; categoryIndex++) {
                     let pageValue: powerbi.PrimitiveValue = categories[0].values[categoryIndex];
@@ -274,7 +293,6 @@ export class Visual implements IVisual {
                 }
                 break
         }
-        console.log(this.datapoints)
 
         let stateIds: stateIds = {
             hoveredIdKey: this.hoveredIdKey,
@@ -291,9 +309,6 @@ export class Visual implements IVisual {
             addFilters(defs, data[i])
         }
 
-        this.svg
-            .style('width', options.viewport.width)
-            .style('height', options.viewport.height)
 
         this.container.selectAll(".frameContainer, .titleForeignObject, .cover").filter((d, i, nodes: Element[]) => {
             return !nodes[i].classList.contains(this.visualSettings.layout.buttonShape)
@@ -495,8 +510,10 @@ export class Visual implements IVisual {
                 object.properties[d.propName] = d.disp
                 d.handleFocused = false
                 this.host.persistProperties({ merge: [object] })
-            })
-    }
+            })*/
+        }
+    
+
 
     private static parseSettings(dataView: DataView): VisualSettings {
         return <VisualSettings>VisualSettings.parse(dataView);

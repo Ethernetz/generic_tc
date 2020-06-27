@@ -8,6 +8,8 @@ export class Shape{
     width: number
     height: number
     radius: number
+    alterVPadding: number = 0
+    // alterHPadding: number = 0
     static handleFocused: boolean = false
     constructor(xPos: number, yPos: number, width: number, height: number, radius?: number){
         this.xPos = xPos
@@ -19,6 +21,10 @@ export class Shape{
 
     get strokePath(): string{
         return this.shapePath
+    }
+
+    static getAlterHPadding(height: number, angle: number){
+        return 0
     }
 
     get handles(): any[]{
@@ -66,8 +72,10 @@ export class Rectangle extends Shape implements Shape{
 
 export class Parallelogram extends Shape implements Shape{
     static _z: number;
+    angle: number
     constructor(xPos: number, yPos: number, width: number, height: number, angle: number, radius: number){
         super(xPos, yPos, width, height, radius)
+        this.angle = angle
         if(!Shape.handleFocused)
             Parallelogram._z = this.height/Math.tan(angle*(Math.PI/180))
     }
@@ -126,14 +134,20 @@ export class Parallelogram extends Shape implements Shape{
         ]
         return handles
     }
+    static getAlterHPadding(height: number, angle: number): number{
+        
+        return -1 * (Parallelogram._z || height / Math.tan(height * (Math.PI / 180)))
+    }
 }
 
 export class ParallelogramVertical extends Shape implements Shape{
     static _z: number;
+    angle: number;
     constructor(xPos: number, yPos: number, width: number, height: number, angle: number, radius: number){
         super(xPos, yPos, width, height, radius)
+        this.angle = angle
         if(!Shape.handleFocused)
-        ParallelogramVertical._z = this.width/Math.tan(angle*(Math.PI/180))
+            ParallelogramVertical._z = this.width/Math.tan(angle*(Math.PI/180))
     }
 
     get shapePath(): string{
@@ -189,12 +203,18 @@ export class ParallelogramVertical extends Shape implements Shape{
         ]
         return handles
     }
+
+    get alterVPadding(): number{
+        return -1 * (ParallelogramVertical._z || this.width/Math.tan(this.angle*(Math.PI/180)))
+    }
 }
 
 export class Chevron extends Shape implements Shape{
     static _z: number;
+    angle: number
     constructor(xPos: number, yPos: number, width: number, height: number, angle: number, radius: number){
         super(xPos, yPos, width, height, radius)
+        this.angle = angle
         if(!Shape.handleFocused)
             Chevron._z = (0.5*this.height)/Math.tan(angle*(Math.PI/180))
     }
@@ -254,12 +274,18 @@ export class Chevron extends Shape implements Shape{
         ]
         return handles
     }
+    static getAlterHPadding(height: number, angle: number): number{
+        console.log("inside...", height, angle, Chevron._z, (0.5 * height) / Math.tan(angle * (Math.PI / 180)))
+        return -1 * (Chevron._z || (0.5 * height) / Math.tan(angle * (Math.PI / 180)))
+    }
 }
 
 export class ChevronVertical extends Shape implements Shape{
     static _z: number;
+    angle: number
     constructor(xPos: number, yPos: number, width: number, height: number, angle: number, radius: number){
         super(xPos, yPos, width, height, radius)
+        this.angle = angle
         if(!Shape.handleFocused)
             ChevronVertical._z = (0.5*this.width)/Math.tan(angle*(Math.PI/180))
     }
@@ -318,6 +344,9 @@ export class ChevronVertical extends Shape implements Shape{
             }
         ]
         return handles
+    }
+    get alterVPadding(): number{
+        return -1 * (ChevronVertical._z || (0.5 * this.width) / Math.tan(this.angle * (Math.PI / 180)))
     }
 }
 
