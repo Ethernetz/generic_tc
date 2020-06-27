@@ -39,7 +39,7 @@ export interface Shape{
     height: number,
     shapePath: string,
     strokePath: string,
-    titleFOPoints: containerProperties,
+    contentFODims: containerProperties,
     handles: any[]
 }
 
@@ -60,7 +60,7 @@ export class Rectangle extends Shape implements Shape{
         return path.toString()
     }
 
-    get titleFOPoints(): containerProperties{
+    get contentFODims(): containerProperties{
         return {
             xPos: this.xPos,
             yPos: this.yPos,
@@ -91,7 +91,7 @@ export class Parallelogram extends Shape implements Shape{
         return path.toString()
     }
 
-    get titleFOPoints(): containerProperties{
+    get contentFODims(): containerProperties{
         return {
             xPos: this.xPos + Parallelogram._z,
             yPos: this.yPos,
@@ -162,7 +162,7 @@ export class ParallelogramVertical extends Shape implements Shape{
         return path.toString()
     }
 
-    get titleFOPoints(): containerProperties{
+    get contentFODims(): containerProperties{
         return {
             xPos: this.xPos,
             yPos: this.yPos + ParallelogramVertical._z,
@@ -233,7 +233,7 @@ export class Chevron extends Shape implements Shape{
         return path.toString()
     }
 
-    get titleFOPoints(): containerProperties{
+    get contentFODims(): containerProperties{
         return {
             xPos: this.xPos + Chevron._z,
             yPos: this.yPos,
@@ -305,7 +305,7 @@ export class ChevronVertical extends Shape implements Shape{
         return path.toString()
     }
 
-    get titleFOPoints(): containerProperties{
+    get contentFODims(): containerProperties{
         return {
             xPos: this.xPos,
             yPos: this.yPos + ChevronVertical._z,
@@ -372,7 +372,7 @@ export class Pentagon extends Shape implements Shape{
         return path.toString()
     }
 
-    get titleFOPoints(): containerProperties{
+    get contentFODims(): containerProperties{
         return {
             xPos: this.xPos,
             yPos: this.yPos,
@@ -438,7 +438,7 @@ export class Hexagon extends Shape implements Shape{
         return path.toString()
     }
 
-    get titleFOPoints(): containerProperties{
+    get contentFODims(): containerProperties{
         return {
             xPos: this.xPos + Hexagon._z,
             yPos: this.yPos,
@@ -501,7 +501,7 @@ export class Ellipse extends Shape implements Shape{
         return path.toString()
     }
 
-    get titleFOPoints(): containerProperties{
+    get contentFODims(): containerProperties{
         return {
             xPos: this.xPos,
             yPos: this.yPos,
@@ -527,7 +527,7 @@ export class Tab_RoundedCorners extends Shape implements Shape{
         return path.toString()
     }
 
-    get titleFOPoints(): containerProperties{
+    get contentFODims(): containerProperties{
         return {
             xPos: this.xPos,
             yPos: this.yPos,
@@ -561,7 +561,7 @@ export class Tab_CutCorners extends Shape implements Shape{
         return path.toString()
     }
 
-    get titleFOPoints(): containerProperties{
+    get contentFODims(): containerProperties{
         return {
             xPos: this.xPos,
             yPos: this.yPos,
@@ -628,7 +628,7 @@ export class Tab_CutCorner extends Shape implements Shape{
         return path.toString()
     }
 
-    get titleFOPoints(): containerProperties{
+    get contentFODims(): containerProperties{
         return {
             xPos: this.xPos,
             yPos: this.yPos,

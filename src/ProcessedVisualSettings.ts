@@ -597,18 +597,18 @@ export class ProcessedVisualSettings {
     }
 
     get titleFOHeight(): number {
-        return this.shape.titleFOPoints.height
+        return this.shape.contentFODims.height
     }
     get titleFOWidth(): number {
-        return this.shape.titleFOPoints.width
+        return this.shape.contentFODims.width
     }
 
     get titleFOXPos(): number {
-        return this.shape.titleFOPoints.xPos
+        return this.shape.contentFODims.xPos
     }
 
     get titleFOYPos(): number {
-        return this.shape.titleFOPoints.yPos
+        return this.shape.contentFODims.yPos
     }
 
     get shapePath(): string {

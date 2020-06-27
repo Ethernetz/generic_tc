@@ -216,7 +216,10 @@ export class Visual implements IVisual {
 
         let shapesCollection = new ShapesCollection()
         shapesCollection.container = this.container
-        shapesCollection.viewport = options.viewport
+        shapesCollection.viewport = {
+            height: options.viewport.height,
+            width:options.viewport.width,
+        }
         
 
         this.visualSettings = VisualSettings.parse(options.dataViews[0]) as VisualSettings

@@ -1,7 +1,8 @@
 import {Viewport} from './interfaces'
 import {FormatSettings} from './FormatSettings'
 import {TileData} from './TileData'
-import {State, TileSizingType, TileLayoutType, AlignmentType, TileShape, Direction} from './enums'
+import {State, TileSizingType, TileLayoutType, AlignmentType, TileShape, Direction, ContentFormatType} from './enums'
+import {getMatchingStateProperty, calculateWordDimensions} from './functions'
 import { Shape, Rectangle, Parallelogram, Chevron, Ellipse, Pentagon, Hexagon, Tab_RoundedCorners, Tab_CutCorners, Tab_CutCorner, ChevronVertical, ParallelogramVertical } from "../shapes"
 export class Tile {
     i: number;
@@ -55,22 +56,90 @@ export class Tile {
     get indexInRow(): number {
         return this.i % this.rowLength
     }
+    get rowStartingIndex(): number {
+        return this.rowNumber * this.rowLength
+    }
 
+    get text(): string{
+        return this.tileData.text
+    }
+    get rowText(): string[] {
+        return this.tilesData.slice(this.rowStartingIndex, this.rowStartingIndex + this.tilesInRow).map(function (td) { return td.text }) as string[]
+    }
 
+    get textFill(): string {
+        return getMatchingStateProperty(this.currentState,this.formatSettings.text, 'color')
+    }
+    get textFillOpacity(): number {
+        return 1 -getMatchingStateProperty(this.currentState,this.formatSettings.text, 'transparency') / 100
+    }
+    get fontSize(): number {
+        return getMatchingStateProperty(this.currentState,this.formatSettings.text, 'fontSize')
+    }
+    get fontFamily(): string {
+        return getMatchingStateProperty(this.currentState,this.formatSettings.text, 'fontFamily')
+    }
+    get textAlign(): string {
+        return getMatchingStateProperty(this.currentState,this.formatSettings.text, 'alignment')
+    }
+    get textHmargin(): number {
+        return getMatchingStateProperty(this.currentState,this.formatSettings.text, 'hmargin')
+    }
+    get textBmargin(): number {
+        return getMatchingStateProperty(this.currentState,this.formatSettings.text, 'bmargin')
+    }
     
+    // get widthSpaceForAllText(): number {
+    //     let totalPadding = (this.tilesInRow - 1) * this.formatSettings.layout.padding;
+    //     return this.viewportWidth - totalPadding - ProcessedVisualSettings.totalTextHmargin;
+    // }
+    get allTextWidth(): number {
+        return calculateWordDimensions(this.rowText.join(""), this.fontFamily, this.fontSize + "pt").width
+    }
+    get widthSpaceForText(): number {
+        return this.contentContainerWidth - 2 * this.textHmargin
+    }
+    get inlineTextWidth(): number {
+        return calculateWordDimensions(this.text, this.fontFamily, this.fontSize + "pt").width
+    }
+    get boundedTextWidth(): number {
+        return calculateWordDimensions(this.text as string, this.fontFamily, this.fontSize + "pt", this.textContainerWidthType, (this.maxInlineTextWidth) + 'px').width;
+    }
+    get boundedTextHeight(): number {
+        return calculateWordDimensions(this.text as string, this.fontFamily, this.fontSize + "pt", this.textContainerWidthType, (this.maxInlineTextWidth) + 'px').height;
+    }
 
+    get textContainerWidthType(): string {
+        return 'auto'
+        // return this.inlineTextWidth + 2 * this.textHmargin + this.iconHmargin >= Math.floor(this.maxInlineTextWidth) && this.settings.icon.icons ? 'min-content' : 'auto'
+    }
+    
+    // get textContainerHeight(): number {
+    //     return ProcessedVisualSettings.maxTextHeight + this.textBmargin
+    // }
+    get contentContainerWidth(): number{
+        return this.shape.contentFODims.width
+    }
+    get widthTakenByIcon(): number{
+        // if (this.formatSettings.icon.icons && this.iconPlacement == enums.Icon_Placement.left)
+        //     w -= this.iconWidth + this.iconHmargin
+        return 0
+    }
+    get maxInlineTextWidth(): number {
+        return this.widthSpaceForText - this.widthTakenByIcon
+    }
 
     get tileFill(): string {
-        return this.getMatchingStateProperty(this.formatSettings.tile, 'color')
+        return getMatchingStateProperty(this.currentState,this.formatSettings.tile, 'color')
     }
     get tileFillOpacity(): number {
-        return 1 - (this.getMatchingStateProperty(this.formatSettings.tile, 'transparency')) / 100
+        return 1 - getMatchingStateProperty(this.currentState, this.formatSettings.tile, 'transparency') / 100
     }
     get tileStroke(): string {
-        return this.getMatchingStateProperty(this.formatSettings.tile, 'stroke')
+        return getMatchingStateProperty(this.currentState,this.formatSettings.tile, 'stroke')
     }
     get tileStrokeWidth(): number {
-        return this.getMatchingStateProperty(this.formatSettings.tile, 'strokeWidth')
+        return getMatchingStateProperty(this.currentState,this.formatSettings.tile, 'strokeWidth')
     }
     get tilePadding(): number {
         return this.formatSettings.layout.padding
@@ -184,6 +253,20 @@ export class Tile {
     get alterVerticalPadding(): number {
         return this.shape.alterVPadding
     }
+    get contentFOHeight(): number {
+        return this.shape.contentFODims.height
+    }
+    get contentFOWidth(): number {
+        return this.shape.contentFODims.width
+    }
+
+    get contentFOXPos(): number {
+        return this.shape.contentFODims.xPos
+    }
+
+    get contentFOYPos(): number {
+        return this.shape.contentFODims.yPos
+    }
 
 
 
@@ -202,25 +285,25 @@ export class Tile {
         return this.formatSettings.effect.shadow
     }
     get shadowColor(): string {
-        return this.getMatchingStateProperty(this.formatSettings.effect, 'shadowColor')
+        return getMatchingStateProperty(this.currentState,this.formatSettings.effect, 'shadowColor')
     }
     get shadowTransparency(): number {
-        return 1 - this.getMatchingStateProperty(this.formatSettings.effect, 'shadowTransparency') / 100
+        return 1 -getMatchingStateProperty(this.currentState,this.formatSettings.effect, 'shadowTransparency') / 100
     }
     get shadowDistance(): number {
-        return this.getMatchingStateProperty(this.formatSettings.effect, 'shadowDistance')
+        return getMatchingStateProperty(this.currentState,this.formatSettings.effect, 'shadowDistance')
     }
     get shadowMaxDistance(): number {
         return Math.max(this.formatSettings.effect.shadowDistanceS, this.formatSettings.effect.shadowDistanceU, this.formatSettings.effect.shadowDistanceH)
     }
     get shadowStrength(): number {
-        return this.getMatchingStateProperty(this.formatSettings.effect, 'shadowStrength')
+        return getMatchingStateProperty(this.currentState,this.formatSettings.effect, 'shadowStrength')
     }
     get shadowMaxStrength(): number {
         return Math.max(this.formatSettings.effect.shadowStrengthS, this.formatSettings.effect.shadowStrengthU, this.formatSettings.effect.shadowStrengthH)
     }
     get shadowDirection(): Direction {
-        return this.getMatchingStateProperty(this.formatSettings.effect, 'shadowDirection')
+        return getMatchingStateProperty(this.currentState,this.formatSettings.effect, 'shadowDirection')
     }
     get shadowDirectionCoords(): { x: number, y: number } {
         switch (this.shadowDirection) {
@@ -244,13 +327,13 @@ export class Tile {
         return this.formatSettings.effect.glow
     }
     get glowColor(): string {
-        return this.getMatchingStateProperty(this.formatSettings.effect, 'glowColor')
+        return getMatchingStateProperty(this.currentState,this.formatSettings.effect, 'glowColor')
     }
     get glowTransparency(): number {
-        return 1 - this.getMatchingStateProperty(this.formatSettings.effect, 'glowTransparency') / 100
+        return 1 -getMatchingStateProperty(this.currentState,this.formatSettings.effect, 'glowTransparency') / 100
     }
     get glowStrength(): number {
-        return this.getMatchingStateProperty(this.formatSettings.effect, 'glowStrength')
+        return getMatchingStateProperty(this.currentState,this.formatSettings.effect, 'glowStrength')
     }
     get glowMaxStrength(): number {
         return Math.max(this.formatSettings.effect.glowStrengthS, this.formatSettings.effect.glowStrengthU, this.formatSettings.effect.glowStrengthH)
@@ -258,6 +341,8 @@ export class Tile {
     get glowSpace(): number {
         return this.formatSettings.effect.glow ? 3 * (this.glowMaxStrength) : 0
     }
+
+
     
 
 
@@ -285,16 +370,157 @@ export class Tile {
     }
 
 
+    get textElement(): HTMLSpanElement {
+        let text = document.createElement('span')
+        text.className = 'text'
+        text.style.width = this.boundedTextWidth + 'px'
+        // if (this.icons) {
+        //     if (this.iconPlacement != enums.Icon_Placement.left) {
+        //         // text.style.position = 'absolute'
+        //         // text.style.right = '0'
+        //     }
+        //     if (this.iconPlacement == enums.Icon_Placement.below) {
+        //         text.style.bottom = '0'
+        //     }
+        // }
 
-    //Functions
-    getMatchingStateProperty(formatObj: any, propBase: string){
-        switch(this.currentState){
-            case State.selected:
-                return formatObj[propBase + 'S']
-            case State.unselected:
-                return formatObj[propBase + 'U']
-            case State.hovered:
-                return formatObj[propBase + 'H']
+        return text
+    }
+
+    get textContainer(): HTMLDivElement {
+        let textContainer = document.createElement('div')
+        textContainer.className = 'textContainer'
+        textContainer.style.position = 'relative'
+        textContainer.style.paddingLeft = this.textHmargin + 'px'
+        textContainer.style.paddingRight = this.textHmargin + 'px'
+        // if (this.settings.icon.icons) {
+        //     if (this.iconPlacement == enums.Icon_Placement.left) {
+        //         textContainer.style.display = 'inline-block'
+        //         textContainer.style.verticalAlign = 'middle'
+        //         textContainer.style.width = this.textContainerWidthByIcon
+        //         textContainer.style.height = this.textHeight + 'px'
+        //         textContainer.style.maxWidth = this.maxInlineTextWidth + 'px'
+        //     } else {
+        //         textContainer.style.width = this.widthSpaceForText + 'px'
+        //         textContainer.style.height = this.textContainerHeight + 'px'
+        //     }
+        // }
+
+        return textContainer
+    }
+
+    // get img(): HTMLDivElement {
+    //     let img = this.auxillaryDivGeneric
+    //     img.className = 'icon'
+    //     img.style.backgroundImage = "url(" + this.iconURL + ")"
+    //     img.style.backgroundRepeat = 'no-repeat'
+    //     img.style.opacity = this.iconOpacity.toString()
+    //     if (this.iconPlacement == enums.Icon_Placement.left) {
+    //         img.style.minWidth = this.iconWidth + 'px'
+    //         img.style.height = this.iconWidth + 'px'
+    //         img.style.display = 'inline-block'
+    //         img.style.verticalAlign = 'middle'
+    //         img.style.marginRight = this.iconHmargin + 'px'
+    //         img.style.backgroundPosition = 'center center'
+    //         img.style.backgroundSize = 'contain'
+    //     } else {
+    //         img.style.maxWidth = this.spaceForIcon + 'px'
+    //         img.style.height = this.iconHeight + 'px'
+    //         img.style.backgroundSize = Math.min(this.iconWidth, this.spaceForIcon) + 'px '
+    //         img.style.margin = this.iconTopMargin + 'px ' + this.iconHmargin + 'px ' + this.iconBottomMargin + 'px '
+    //         if (this.iconPlacement == enums.Icon_Placement.above) {
+    //             img.style.backgroundPosition = 'center bottom'
+    //         } else {
+    //             img.style.backgroundPosition = 'center top'
+    //             img.style.position = 'absolute'
+    //             img.style.bottom = '0'
+    //         }
+    //     }
+    //     return img
+    // }
+
+    // get measureValueContainer(): HTMLDivElement{
+    //     let container = this.auxillaryDivGeneric
+    //     container.className = 'measureContainer'
+    //     let text = document.createElement('span')
+    //     text.className = 'measureText'
+    //     text.textContent = this.isMeasures(this.datapoint) ? this.datapoint.measureValue as string : null
+    //     container.append(text)
+    //     return container
+    // }
+
+    // get auxillaryDivGeneric(): HTMLDivElement {
+    //     let aux = document.createElement('div')
+        
+    //     return aux
+    // }
+
+    // get showAuxillary(): boolean {
+    //     if(this.settings.content.source == enums.Content_Source.measures)
+    //         return true
+    //     else
+    //         return this.settings.icon.icons
+    // }
+
+    // get auxillaryDiv(): HTMLDivElement {
+    //     if(this.settings.content.source == enums.Content_Source.measures)
+    //         return this.measureValueContainer
+    //     else
+    //         return this.img
+    // }
+
+    // get titleContent(): HTMLDivElement {
+    //     let titleContainer = document.createElement('div')
+    //     titleContainer.className = "titleContainer"
+
+    //     let text = this.textElement
+    //     let textContainer = this.textContainer
+    //     textContainer.append(text)
+    //     if (this.showAuxillary) {
+    //         let aux = this.auxillaryDiv
+    //         if(this.icons){
+    //             if (this.iconPlacement == enums.Icon_Placement.left) {
+    //                 titleContainer.style.display = 'inline-block'
+    //                 titleContainer.append(aux, textContainer)
+    //             } else {
+    //                 titleContainer.style.height = this.titleFOHeight + 'px'
+    //                 titleContainer.style.maxHeight = this.titleFOHeight + 'px'
+    //                 if (this.iconPlacement == enums.Icon_Placement.above)
+    //                     titleContainer.append(aux, textContainer)
+    //                 else
+    //                     titleContainer.append(textContainer, aux)
+    //             }
+    //         } else {
+    //             titleContainer.append(aux, textContainer)
+    //         }                
+    //     } else
+    //         titleContainer.append(textContainer)
+    //     return titleContainer
+    // }
+
+    get contentTextFormat(): HTMLDivElement{
+        let contentContainer = document.createElement('div')
+        contentContainer.className = "contentContainer"
+
+        let text = this.textElement
+        text.textContent = this.text
+
+        let textContainer = this.textContainer
+        textContainer.append(text)
+
+        contentContainer.append(textContainer)
+
+
+        return contentContainer
+    }
+
+
+    get content(): HTMLDivElement {
+        switch(this.tileData.contentFormatType){
+            case ContentFormatType.text:
+                return this.contentTextFormat
+            default:
+                return this.contentTextFormat
         }
     }
     

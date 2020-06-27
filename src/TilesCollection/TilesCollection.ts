@@ -53,21 +53,21 @@ export class TilesCollection {
 
         
         // Do I need this
-        this.container.selectAll(".tileContainer, .contentForeignObject, .cover").filter((d, i, nodes: Element[]) => {
-            return !nodes[i].classList.contains(this.formatSettings.layout.tileShape)
-        }).remove()
+        // this.container.selectAll(".tileContainer, .contentFO, .cover").filter((d, i, nodes: Element[]) => {
+        //     return !nodes[i].classList.contains(this.formatSettings.layout.tileShape)
+        // }).remove()
 
         let tileContainer = this.container.selectAll('.tileContainer').data(tiles)
         tileContainer.exit().remove()
         tileContainer = tileContainer.enter().append('g')
-            .attr("class", function (d) { return "tileContainer " + d.tileShape  + d.tileData.text})
+            .attr("class", function (d) { console.log("entered a tilecontainer");return "tileContainer " + d.tileShape  + d.tileData.text})
         tileContainer.append('path').attr("class", "fill")
         tileContainer.append('path').attr("class", "stroke")
         
 
         tileContainer = this.container.selectAll('.tileContainer').data(tiles)
         tileContainer.select(".fill")
-            .attr("d", function (d) { return d.shapePath })
+            .attr("d", function (d) {return d.shapePath })
             .attr("fill", function (d) { return d.tileFill })
             .style("fill-opacity", function (d) { return d.tileFillOpacity })
             .style("filter", function (d) { return d.filter })
@@ -78,7 +78,38 @@ export class TilesCollection {
             .style("stroke-width", function (d) { return d.tileStrokeWidth })
 
 
-
+        let contentFO = this.container.selectAll('.contentFO').data(tiles)
+        contentFO.exit().remove()
+        contentFO.enter()
+            .append('foreignObject')
+            .attr("class", function (d) { console.log("entered a contentFO");return "contentFO " + d.tileShape })
+            .append("xhtml:div")
+            .attr("class", "contentTable")
+            .append("xhtml:div")
+            .attr("class", "contentTableCell")
+            .append("xhtml:div")
+            .attr("class", "contentContainer")
+        
+        contentFO = this.container.selectAll('.contentFO').data(tiles)
+            .attr("height", function (d) { return d.contentFOHeight })
+            .attr("width", function (d) { return d.contentFOWidth })
+            .attr("x", function (d) { return d.contentFOXPos })
+            .attr("y", function (d) { return d.contentFOYPos })
+        contentFO.select('.contentTable')
+            .style("height", "100%")
+            .style("width", "100%")
+            .style("display", "table")
+        contentFO.select(".contentTableCell")
+            .style("display", "table-cell")
+            .style("vertical-align", "middle")
+            .html("")
+            .style("text-align", function (d) { return d.textAlign })
+            .append(function (d) { return d.content })
+            .select('.textContainer')
+            .style("opacity", function (d) { return d.textFillOpacity })
+            .style("font-size", function (d) { return d.fontSize + "pt" })
+            .style("font-family", function (d) { return d.fontFamily })
+            .style("color", function (d) { return d.textFill })
 
 
 
