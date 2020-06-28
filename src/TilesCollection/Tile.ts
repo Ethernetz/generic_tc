@@ -177,6 +177,7 @@ export class Tile {
     get tileWidth(): number {
         switch (this.formatSettings.layout.sizingMethod) {
             case TileSizingType.uniform:
+                console.log(this.totalTileHPadding, this.alterHorizontalPadding)
                 return (this.containerWidth - this.totalTileHPadding) / (this.rowLength)
             case TileSizingType.fixed:
                 return this.formatSettings.layout.tileWidth
@@ -268,7 +269,7 @@ export class Tile {
         switch (this.tileShape) {
             case TileShape.parallelogram:
                 if (this.formatSettings.layout.tileLayout != TileLayoutType.vertical)
-                    return Parallelogram.getAlterHPadding(this.tileHeight, this.formatSettings.layout.parallelogramAngle)
+                    return Parallelogram.getAlterHPadding(this.tileHeight, this.formatSettings.layout.parallelogramAngle) //FIX why -1??
             case TileShape.chevron:
                 if (this.formatSettings.layout.tileLayout != TileLayoutType.vertical)
                     return Chevron.getAlterHPadding(this.tileHeight, this.formatSettings.layout.chevronAngle)
