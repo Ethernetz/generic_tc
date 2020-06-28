@@ -39,12 +39,12 @@
                             },
                             {
                                 "displayName": "Hover",
-                                "value": "hover"
+                                "value": "hovered"
                             }
                         ]
                     }
                 },
-                "hover": {
+                "hoverStyling": {
                     "displayName": "Hover styling",
                     "description": "Allow seperate hover styling",
                     "type": {
@@ -219,12 +219,12 @@
                             },
                             {
                                 "displayName": "Hover",
-                                "value": "hover"
+                                "value": "hovered"
                             }
                         ]
                     }
                 },
-                "hover": {
+                "hoverStyling": {
                     "displayName": "Hover styling",
                     "description": "Allow seperate hover styling",
                     "type": {
@@ -486,12 +486,12 @@
                             },
                             {
                                 "displayName": "Hover",
-                                "value": "hover"
+                                "value": "hovered"
                             }
                         ]
                     }
                 },
-                "hover": {
+                "hoverStyling": {
                     "displayName": "Hover styling",
                     "description": "Allow seperate hover styling",
                     "type": {
@@ -910,12 +910,12 @@
                             },
                             {
                                 "displayName": "Hover",
-                                "value": "hover"
+                                "value": "hovered"
                             }
                         ]
                     }
                 },
-                "hover": {
+                "hoverStyling": {
                     "displayName": "Hover styling",
                     "description": "Allow seperate hover styling",
                     "type": {
@@ -1551,12 +1551,12 @@
                             },
                             {
                                 "displayName": "Hover",
-                                "value": "hover"
+                                "value": "hovered"
                             }
                         ]
                     }
                 },
-                "hover": {
+                "hoverStyling": {
                     "displayName": "Hover styling",
                     "description": "Allow seperate hover styling",
                     "type": {

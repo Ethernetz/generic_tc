@@ -82,6 +82,7 @@ export class Visual implements IVisual {
     private hoveredIdKey: string;
     private hoveredIndexUnbound: number;
 
+    public hoveredIndex: number
 
     private shiftFired: boolean = false
 
@@ -258,7 +259,12 @@ export class Visual implements IVisual {
                     return this.selectionId &&
                     selectionIdKeys &&
                     selectionIdKeys.indexOf(this.selectionId.getKey() as string) > -1
-                }
+                },
+                // get isHovered(): boolean{
+                //     console.log(this.h)
+                //     return this.hoveredIndex == i
+                // }
+                isHovered: this.hoveredIndex == i
             });
 
         }   

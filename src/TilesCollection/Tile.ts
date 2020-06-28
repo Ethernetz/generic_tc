@@ -126,8 +126,6 @@ export class Tile {
     }
 
     get textContainerWidthType(): string {
-        // return 'auto'
-        // console.log(this.i, this.inlineTextWidth + 2 * this.textHmargin >= Math.floor(this.maxInlineTextWidth) )
         return this.inlineTextWidth + 2 * this.textHmargin >= Math.floor(this.maxInlineTextWidth) 
                 && this.tileData.contentFormatType == ContentFormatType.text_icon
                 && this.iconPlacement == IconPlacement.left

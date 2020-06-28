@@ -29,6 +29,15 @@ export class Generic extends Tile{
         this.visual.selectionManager.select((<GenericeData>this.tileData).selectionId, false)
         this.visual.update(this.collection.options)
     }
+
+    onTileMouseover(){
+        this.visual.hoveredIndex = this.i
+        this.visual.update(this.collection.options)
+    }
+    onTileMouseout(){
+        this.visual.hoveredIndex = null
+        this.visual.update(this.collection.options)
+    }
 }
 
 export class GenericeData extends TileData{
