@@ -4,13 +4,13 @@ export enum Align {
     right = "right"
 }
 
-export enum Button_Sizing_Method {
+export enum Tile_Sizing_Method {
     uniform = "uniform",
     fixed = "fixed",
     dynamic = "dynamic"
 }
 
-export enum Button_Layout {
+export enum Tile_Layout {
     horizontal = "horizontal",
     vertical = "vertical",
     grid = "grid"
@@ -42,7 +42,7 @@ export enum Direction {
     custom = "custom"
 }
 
-export enum Button_Shape {
+export enum Tile_Shape {
     rectangle = "rectangle",
     parallelogram = "parallelogram",
     chevron = "chevron",
@@ -54,7 +54,7 @@ export enum Button_Shape {
     tab_cutCorner = "tab_cutCorner"
 }
 
-export enum Content_Source {
+export enum ContentSource {
     databound = "databound",
     fixed = "fixed",
     measures = "measures"

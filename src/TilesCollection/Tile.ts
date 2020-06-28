@@ -4,11 +4,16 @@ import {TileData} from './TileData'
 import {State, TileSizingType, TileLayoutType, AlignmentType, TileShape, Direction, ContentFormatType, IconPlacement} from './enums'
 import {getMatchingStateProperty, calculateWordDimensions} from './functions'
 import { Shape, Rectangle, Parallelogram, Chevron, Ellipse, Pentagon, Hexagon, Tab_RoundedCorners, Tab_CutCorners, Tab_CutCorner, ChevronVertical, ParallelogramVertical } from "../shapes"
+import { BaseType } from 'd3'
+import { ShapesCollection } from '../ShapesCollection'
+import { TilesCollection } from './TilesCollection'
 export class Tile {
+    collection: TilesCollection
     i: number;
     tilesData: TileData[]
     formatSettings: FormatSettings;
-    constructor(i, tilesData: TileData[], formatSettings: FormatSettings){
+    constructor(collection: TilesCollection,i:number, tilesData: TileData[], formatSettings: FormatSettings){
+        this.collection = collection
         this.i = i;
         this.tilesData = tilesData;
         this.formatSettings = formatSettings;
@@ -542,5 +547,12 @@ export class Tile {
                 return this.contentTextFormat
         }
     }
+
+
+    //Events
+
+    onTileMouseover(d?: Tile, i?: number, n?:BaseType[] | ArrayLike<BaseType>){}
+    onTileMouseout(d?: Tile, i?: number, n?:BaseType[] | ArrayLike<BaseType>){}
+    onTileClick(d?: Tile, i?: number, n?:BaseType[] | ArrayLike<BaseType>){} 
     
 }

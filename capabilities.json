@@ -17,8 +17,8 @@
         }
     ],
     "objects": {
-        "button": {
-            "displayName": "Buttons",
+        "tile": {
+            "displayName": "Tiles",
             "properties": {
                 "state": {
                     "displayName": "State",
@@ -53,7 +53,7 @@
                 },
                 "colorA": {
                     "displayName": "Background color",
-                    "description": "Background color for the buttons.",
+                    "description": "Background color for the tiles.",
                     "type": {
                         "fill": {
                             "solid": {
@@ -64,7 +64,7 @@
                 },
                 "colorS": {
                     "displayName": "Background color",
-                    "description": "Background color for the selected button.",
+                    "description": "Background color for the selected tile.",
                     "type": {
                         "fill": {
                             "solid": {
@@ -75,7 +75,7 @@
                 },
                 "colorU": {
                     "displayName": "Background color",
-                    "description": "Background color for the unselected buttons.",
+                    "description": "Background color for the unselected tiles.",
                     "type": {
                         "fill": {
                             "solid": {
@@ -86,7 +86,7 @@
                 },
                 "colorH": {
                     "displayName": "Background color (hover)",
-                    "description": "Background color for the hovered button.",
+                    "description": "Background color for the hovered tile.",
                     "type": {
                         "fill": {
                             "solid": {
@@ -97,7 +97,7 @@
                 },
                 "strokeA": {
                     "displayName": "Border color",
-                    "description": "Border color for the buttons.",
+                    "description": "Border color for the tiles.",
                     "type": {
                         "fill": {
                             "solid": {
@@ -108,7 +108,7 @@
                 },
                 "strokeS": {
                     "displayName": "Border color",
-                    "description": "Border color for the buttons.",
+                    "description": "Border color for the tiles.",
                     "type": {
                         "fill": {
                             "solid": {
@@ -119,7 +119,7 @@
                 },
                 "strokeU": {
                     "displayName": "Border color",
-                    "description": "Border color for the buttons.",
+                    "description": "Border color for the tiles.",
                     "type": {
                         "fill": {
                             "solid": {
@@ -130,7 +130,7 @@
                 },
                 "strokeH": {
                     "displayName": "Border color (hover)",
-                    "description": "Border color for the buttons.",
+                    "description": "Border color for the tiles.",
                     "type": {
                         "fill": {
                             "solid": {
@@ -169,28 +169,28 @@
                 },
                 "transparencyA": {
                     "displayName": "Transparency",
-                    "description": "The transparency of the button.",
+                    "description": "The transparency of the tile.",
                     "type": {
                         "numeric": true
                     }
                 },
                 "transparencyS": {
                     "displayName": "Transparency",
-                    "description": "The transparency of the button.",
+                    "description": "The transparency of the tile.",
                     "type": {
                         "numeric": true
                     }
                 },
                 "transparencyU": {
                     "displayName": "Transparency",
-                    "description": "The transparency of the button.",
+                    "description": "The transparency of the tile.",
                     "type": {
                         "numeric": true
                     }
                 },
                 "transparencyH": {
                     "displayName": "Transparency",
-                    "description": "The transparency of the button.",
+                    "description": "The transparency of the tile.",
                     "type": {
                         "numeric": true
                     }
@@ -373,56 +373,56 @@
                 },
                 "hmarginA": {
                     "displayName": "Horizontal margin",
-                    "description": "Margin between text and button left and right",
+                    "description": "Margin between text and tile left and right",
                     "type": {
                         "numeric": true
                     }
                 },
                 "hmarginS": {
                     "displayName": "Horizontal margin",
-                    "description": "Margin between text and button left and right",
+                    "description": "Margin between text and tile left and right",
                     "type": {
                         "numeric": true
                     }
                 },
                 "hmarginU": {
                     "displayName": "Horizontal margin",
-                    "description": "Margin between text and button left and right",
+                    "description": "Margin between text and tile left and right",
                     "type": {
                         "numeric": true
                     }
                 },
                 "hmarginH": {
                     "displayName": "Horizontal margin",
-                    "description": "Margin between text and button left and right",
+                    "description": "Margin between text and tile left and right",
                     "type": {
                         "numeric": true
                     }
                 },
                 "bmarginA": {
                     "displayName": "Bottom margin",
-                    "description": "Margin between text and button top and bottom",
+                    "description": "Margin between text and tile top and bottom",
                     "type": {
                         "numeric": true
                     }
                 },
                 "bmarginS": {
                     "displayName": "Bottom margin",
-                    "description": "Margin between text and button top and bottom",
+                    "description": "Margin between text and tile top and bottom",
                     "type": {
                         "numeric": true
                     }
                 },
                 "bmarginU": {
                     "displayName": "Bottom margin",
-                    "description": "Margin between text and button top and bottom",
+                    "description": "Margin between text and tile top and bottom",
                     "type": {
                         "numeric": true
                     }
                 },
                 "bmarginH": {
                     "displayName": "Bottom margin",
-                    "description": "Margin between text and button top and bottom",
+                    "description": "Margin between text and tile top and bottom",
                     "type": {
                         "numeric": true
                     }
@@ -462,7 +462,7 @@
             "properties": {
                 "icons": {
                     "displayName": "Icons",
-                    "description": "Add an icon to each button",
+                    "description": "Add an icon to each tile",
                     "type": {
                         "bool": true
                     }
@@ -500,7 +500,7 @@
                 },
                 "placementA": {
                     "displayName": "Placement All",
-                    "description": "How buttons will be laid out.",
+                    "description": "How tiles will be laid out.",
                     "type": {
                         "enumeration": [
                             {
@@ -520,7 +520,7 @@
                 },
                 "placementS": {
                     "displayName": "Placement",
-                    "description": "How buttons will be laid out.",
+                    "description": "How tiles will be laid out.",
                     "type": {
                         "enumeration": [
                             {
@@ -540,7 +540,7 @@
                 },
                 "placementU": {
                     "displayName": "Placement",
-                    "description": "How buttons will be laid out.",
+                    "description": "How tiles will be laid out.",
                     "type": {
                         "enumeration": [
                             {
@@ -560,7 +560,7 @@
                 },
                 "placementH": {
                     "displayName": "Placement",
-                    "description": "How buttons will be laid out.",
+                    "description": "How tiles will be laid out.",
                     "type": {
                         "enumeration": [
                             {
@@ -608,28 +608,28 @@
                 },
                 "hmarginA": {
                     "displayName": "Horizontal margin",
-                    "description": "Margin between icon and button left and right",
+                    "description": "Margin between icon and tile left and right",
                     "type": {
                         "numeric": true
                     }
                 },
                 "hmarginS": {
                     "displayName": "Horizontal margin",
-                    "description": "Margin between icon and button left and right",
+                    "description": "Margin between icon and tile left and right",
                     "type": {
                         "numeric": true
                     }
                 },
                 "hmarginU": {
                     "displayName": "Horizontal margin",
-                    "description": "Margin between icon and button left and right",
+                    "description": "Margin between icon and tile left and right",
                     "type": {
                         "numeric": true
                     }
                 },
                 "hmarginH": {
                     "displayName": "Horizontal margin",
-                    "description": "Margin between icon and button left and right",
+                    "description": "Margin between icon and tile left and right",
                     "type": {
                         "numeric": true
                     }
@@ -723,9 +723,9 @@
         "layout": {
             "displayName": "Layout",
             "properties": {
-                "buttonShape": {
+                "tileShape": {
                     "displayName": "Shape",
-                    "description": "The shape of the buttons",
+                    "description": "The shape of the tiles",
                     "type": {
                         "enumeration": [
                             {
@@ -811,7 +811,7 @@
                 },
                 "sizingMethod": {
                     "displayName": "Sizing method",
-                    "description": "How buttons will be sized based on their text.",
+                    "description": "How tiles will be sized based on their text.",
                     "type": {
                         "enumeration": [
                             {
@@ -829,9 +829,9 @@
                         ]
                     }
                 },
-                "buttonLayout": {
+                "tileLayout": {
                     "displayName": "Layout",
-                    "description": "How buttons will be laid out.",
+                    "description": "How tiles will be laid out.",
                     "type": {
                         "enumeration": [
                             {
@@ -849,23 +849,23 @@
                         ]
                     }
                 },
-                "buttonWidth": {
-                    "displayName": "Button width",
-                    "description": "The width of each button.",
+                "tileWidth": {
+                    "displayName": "Tile width",
+                    "description": "The width of each tile.",
                     "type": {
                         "numeric": true
                     }
                 },
-                "buttonHeight": {
-                    "displayName": "Button height",
-                    "description": "The height of each button.",
+                "tileHeight": {
+                    "displayName": "Tile height",
+                    "description": "The height of each tile.",
                     "type": {
                         "numeric": true
                     }
                 },
-                "buttonAlignment": {
-                    "displayName": "Button alignment",
-                    "description": "Alignment for buttons in the visual",
+                "tileAlignment": {
+                    "displayName": "Tile alignment",
+                    "description": "Alignment for tiles in the visual",
                     "type": {
                         "formatting": {
                             "alignment": true
@@ -873,15 +873,15 @@
                     }
                 },
                 "rowLength": {
-                    "displayName": "Buttons per row",
-                    "description": "Number of buttons in each row of the grid",
+                    "displayName": "Tiles per row",
+                    "description": "Number of tiles in each row of the grid",
                     "type": {
                         "numeric": true
                     }
                 },
                 "padding": {
-                    "displayName": "Padding between buttons",
-                    "description": "The padding between buttons.",
+                    "displayName": "Padding between tiles",
+                    "description": "The padding between tiles.",
                     "type": {
                         "numeric": true
                     }
@@ -931,7 +931,7 @@
                 },
                 "shadow": {
                     "displayName": "Shadow",
-                    "description": "Add a shadow to each button",
+                    "description": "Add a shadow to each tile",
                     "type": {
                         "bool": true
                     }
@@ -1247,7 +1247,7 @@
                 },
                 "glow": {
                     "displayName": "Glow",
-                    "description": "Add a glow to each button",
+                    "description": "Add a glow to each tile",
                     "type": {
                         "bool": true
                     }
@@ -1348,7 +1348,7 @@
             "properties": {
                 "multiselect": {
                     "displayName": "Multiselect",
-                    "description": "Ability to select multiple buttons",
+                    "description": "Ability to select multiple tiles",
                     "type": {
                         "bool": true
                     }
@@ -1374,155 +1374,155 @@
                     }
                 },
                 "n": {
-                    "displayName": "Number of buttons",
-                    "description": "Number of buttons.",
+                    "displayName": "Number of tiles",
+                    "description": "Number of tiles.",
                     "type": {
                         "numeric": true
                     }
                 },
                 "icons": {
                     "displayName": "Icons",
-                    "description": "Option to give URL for button icons",
+                    "description": "Option to give URL for tile icons",
                     "type": {
                         "bool": true
                     }
                 },
                 "text1": {
-                    "displayName": "Button 1 Text",
-                    "description": "Text for the first button",
+                    "displayName": "Tile 1 Text",
+                    "description": "Text for the first tile",
                     "type": {
                         "text": true
                     }
                 },
                 "text2": {
-                    "displayName": "Button 2 Text",
-                    "description": "Text for the second button",
+                    "displayName": "Tile 2 Text",
+                    "description": "Text for the second tile",
                     "type": {
                         "text": true
                     }
                 },
                 "text3": {
-                    "displayName": "Button 3 Text",
-                    "description": "Text for the third button",
+                    "displayName": "Tile 3 Text",
+                    "description": "Text for the third tile",
                     "type": {
                         "text": true
                     }
                 },
                 "text4": {
-                    "displayName": "Button 4 Text",
-                    "description": "Text for the fourth button",
+                    "displayName": "Tile 4 Text",
+                    "description": "Text for the fourth tile",
                     "type": {
                         "text": true
                     }
                 },
                 "text5": {
-                    "displayName": "Button 5 Text",
-                    "description": "Text for the fifth button",
+                    "displayName": "Tile 5 Text",
+                    "description": "Text for the fifth tile",
                     "type": {
                         "text": true
                     }
                 },
                 "text6": {
-                    "displayName": "Button 6 Text",
-                    "description": "Text for the sixth button",
+                    "displayName": "Tile 6 Text",
+                    "description": "Text for the sixth tile",
                     "type": {
                         "text": true
                     }
                 },
                 "text7": {
-                    "displayName": "Button 7 Text",
-                    "description": "Text for the seventh button",
+                    "displayName": "Tile 7 Text",
+                    "description": "Text for the seventh tile",
                     "type": {
                         "text": true
                     }
                 },
                 "text8": {
-                    "displayName": "Button 8 Text",
-                    "description": "Text for the eighth button",
+                    "displayName": "Tile 8 Text",
+                    "description": "Text for the eighth tile",
                     "type": {
                         "text": true
                     }
                 },
                 "text9": {
-                    "displayName": "Button 9 Text",
-                    "description": "Text for the ninth button",
+                    "displayName": "Tile 9 Text",
+                    "description": "Text for the ninth tile",
                     "type": {
                         "text": true
                     }
                 },
                 "text10": {
-                    "displayName": "Button 10 Text",
-                    "description": "Text for the tenth button",
+                    "displayName": "Tile 10 Text",
+                    "description": "Text for the tenth tile",
                     "type": {
                         "text": true
                     }
                 },
                 "icon1": {
-                    "displayName": "Button 1 Icon URL",
-                    "description": "Icon URL for the first button",
+                    "displayName": "Tile 1 Icon URL",
+                    "description": "Icon URL for the first tile",
                     "type": {
                         "text": true
                     }
                 },
                 "icon2": {
-                    "displayName": "Button 2 Icon URL",
-                    "description": "Icon URL for the second button",
+                    "displayName": "Tile 2 Icon URL",
+                    "description": "Icon URL for the second tile",
                     "type": {
                         "text": true
                     }
                 },
                 "icon3": {
-                    "displayName": "Button 3 Icon URL",
-                    "description": "Icon URL for the third button",
+                    "displayName": "Tile 3 Icon URL",
+                    "description": "Icon URL for the third tile",
                     "type": {
                         "text": true
                     }
                 },
                 "icon4": {
-                    "displayName": "Button 4 Icon URL",
-                    "description": "Icon URL for the fourth button",
+                    "displayName": "Tile 4 Icon URL",
+                    "description": "Icon URL for the fourth tile",
                     "type": {
                         "text": true
                     }
                 },
                 "icon5": {
-                    "displayName": "Button 5 Icon URL",
-                    "description": "Icon URL for the fifth button",
+                    "displayName": "Tile 5 Icon URL",
+                    "description": "Icon URL for the fifth tile",
                     "type": {
                         "text": true
                     }
                 },
                 "icon6": {
-                    "displayName": "Button 6 Icon URL",
-                    "description": "Icon URL for the sixth button",
+                    "displayName": "Tile 6 Icon URL",
+                    "description": "Icon URL for the sixth tile",
                     "type": {
                         "text": true
                     }
                 },
                 "icon7": {
-                    "displayName": "Button 7 Icon URL",
-                    "description": "Icon URL for the seventh button",
+                    "displayName": "Tile 7 Icon URL",
+                    "description": "Icon URL for the seventh tile",
                     "type": {
                         "text": true
                     }
                 },
                 "icon8": {
-                    "displayName": "Button 8 Icon URL",
-                    "description": "Icon URL for the eighth button",
+                    "displayName": "Tile 8 Icon URL",
+                    "description": "Icon URL for the eighth tile",
                     "type": {
                         "text": true
                     }
                 },
                 "icon9": {
-                    "displayName": "Button 9 Icon URL",
-                    "description": "Icon URL for the ninth button",
+                    "displayName": "Tile 9 Icon URL",
+                    "description": "Icon URL for the ninth tile",
                     "type": {
                         "text": true
                     }
                 },
                 "icon10": {
-                    "displayName": "Button 10 Icon URL",
-                    "description": "Icon URL for the tenth button",
+                    "displayName": "Tile 10 Icon URL",
+                    "description": "Icon URL for the tenth tile",
                     "type": {
                         "text": true
                     }

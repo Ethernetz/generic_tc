@@ -47,10 +47,10 @@ import EnumerateVisualObjectInstancesOptions = powerbi.EnumerateVisualObjectInst
 import { valueFormatter } from "powerbi-visuals-utils-formattingutils"
 
 import * as d3 from "d3";
-import { ProcessedVisualSettings } from "./processedvisualsettings";
+// import { ProcessedVisualSettings } from "./processedvisualsettings";
 
 import { Datapoint, propertyStateName, stateIds, Handle, DatapointDatabound, DatapointFixed, DatapointMeasures } from './interfaces'
-import { getPropertyStateNameArr, addFilters, getObjectsToPersist, levelProperties, getCorrectPropertyStateName } from './functions'
+import { getPropertyStateNameArr, getObjectsToPersist, levelProperties, getCorrectPropertyStateName } from './functions'
 import { SelectionManagerUnbound } from './SelectionManagerUnbound'
 
 type Selection<T extends d3.BaseType> = d3.Selection<T, any, any, any>;
@@ -58,15 +58,13 @@ type Selection<T extends d3.BaseType> = d3.Selection<T, any, any, any>;
 import * as enums from "./enums"
 import { select, merge } from "d3";
 
-import { styleTitleFO, styleTitleTable, styleTitleTableCell, constructTitleFamily, styleFrameFill, styleFrameStroke, addHandles, constructFrameFamily, styleTextArea, resizeCoverTitleElements, sizeTextContainer, makeTextTransparent, styleText } from './d3calls'
 
-
-import {TilesCollection, ShapesCollection} from './TilesCollection/TilesCollection'
+import {ShapesCollection} from './ShapesCollection'
 import { ContentFormatType } from "./TilesCollection/enums";
 
 export class Visual implements IVisual {
     private target: HTMLElement;
-    private selectionManager: ISelectionManager;
+    public selectionManager: ISelectionManager;
     private selectionManagerUnbound: SelectionManagerUnbound
     private selectionManagerHover: ISelectionManager;
     private selectionIds: any = {};
@@ -151,14 +149,14 @@ export class Visual implements IVisual {
                     delete settings.effects[effectSettingsKeys[i]]
 
         switch (settings.content.source) {
-            case enums.Content_Source.databound:
+            case enums.ContentSource.databound:
                 delete settings.content.n
                 for (let i = 1; i < 11; i++) {
                     delete settings.content['text' + i]
                     delete settings.content['icon' + i]
                 }
                 break
-            case enums.Content_Source.fixed:
+            case enums.ContentSource.fixed:
                 for (let i = 10; i > settings.content.n; i--) {
                     delete settings.content['text' + i]
                     delete settings.content['icon' + i]
@@ -173,34 +171,34 @@ export class Visual implements IVisual {
             delete settings.icon[getCorrectPropertyStateName(settings.icon.state, "topMargin")]
             delete settings.icon[getCorrectPropertyStateName(settings.icon.state, "bottomMargin")]
         }
-        if(!(settings.content.source != enums.Content_Source.measures && settings.icon.icons && iconPlacement == enums.Icon_Placement.above))
+        if(!(settings.content.source != enums.ContentSource.measures && settings.icon.icons && iconPlacement == enums.Icon_Placement.above))
             delete settings.text[getCorrectPropertyStateName(settings.text.state, "bmargin")]
 
-        if (settings.layout.sizingMethod != enums.Button_Sizing_Method.fixed) {
-            delete settings.layout.buttonWidth;
-            delete settings.layout.buttonHeight;
-            delete settings.layout.buttonAlignment;
+        if (settings.layout.sizingMethod != enums.Tile_Sizing_Method.fixed) {
+            delete settings.layout.tileWidth;
+            delete settings.layout.tileHeight;
+            delete settings.layout.tileAlignment;
         }
-        if (settings.layout.buttonLayout != enums.Button_Layout.grid) {
+        if (settings.layout.tileLayout != enums.Tile_Layout.grid) {
             delete settings.layout.rowLength
         }
 
-        if (settings.layout.buttonShape != enums.Button_Shape.parallelogram) {
+        if (settings.layout.tileShape != enums.Tile_Shape.parallelogram) {
             delete settings.layout.parallelogramAngle
         }
-        if (settings.layout.buttonShape != enums.Button_Shape.chevron) {
+        if (settings.layout.tileShape != enums.Tile_Shape.chevron) {
             delete settings.layout.chevronAngle
         }
-        if (settings.layout.buttonShape != enums.Button_Shape.pentagon) {
+        if (settings.layout.tileShape != enums.Tile_Shape.pentagon) {
             delete settings.layout.pentagonAngle
         }
-        if (settings.layout.buttonShape != enums.Button_Shape.hexagon) {
+        if (settings.layout.tileShape != enums.Tile_Shape.hexagon) {
             delete settings.layout.hexagonAngle
         }
-        if (settings.layout.buttonShape != enums.Button_Shape.tab_cutCorners) {
+        if (settings.layout.tileShape != enums.Tile_Shape.tab_cutCorners) {
             delete settings.layout.tab_cutCornersLength
         }
-        if (settings.layout.buttonShape != enums.Button_Shape.tab_cutCorner) {
+        if (settings.layout.tileShape != enums.Tile_Shape.tab_cutCorner) {
             delete settings.layout.tab_cutCornerLength
         }
 
@@ -210,7 +208,14 @@ export class Visual implements IVisual {
     public update(options: VisualUpdateOptions) {
         if (!(options && options.dataViews && options.dataViews[0]))
             return
-            this.svg
+        this.visualSettings = VisualSettings.parse(options.dataViews[0]) as VisualSettings
+        let objects: powerbi.VisualObjectInstancesToPersist = getObjectsToPersist(this.visualSettings)
+        console.log(objects)
+        if (objects.merge.length != 0)
+            this.host.persistProperties(objects);
+        
+
+        this.svg
             .style('width', options.viewport.width)
             .style('height', options.viewport.height)
 
@@ -221,24 +226,37 @@ export class Visual implements IVisual {
             height: options.viewport.height,
             width:options.viewport.width,
         }
-        
-
-        this.visualSettings = VisualSettings.parse(options.dataViews[0]) as VisualSettings
+        shapesCollection.visual = this
+        shapesCollection.options = options
         let dataView = options.dataViews[0]
         let categories: powerbi.DataViewCategoryColumn[] = dataView.categorical.categories;
+        let selectionIdKeys: string[] = (this.selectionManager.getSelectionIds() as powerbi.visuals.ISelectionId[]).map(x => x.getKey()) as string[]
         for (let i = 0; i < categories[0].values.length; i++) {
-            let pageValue: powerbi.PrimitiveValue = categories[0].values[i];
-            let iconURL: powerbi.PrimitiveValue =  categories[1] ? categories[1].values[i] : null;
+            let pageValue: string = categories[0].values[i].toString();
+            let iconURL: string =  categories[1] ? categories[1].values[i].toString() : null;
+            let tileSelectionId = this.host.createSelectionIdBuilder()
+                        .withCategory(categories[0], i)
+                        .createSelectionId();
             shapesCollection.tilesData.push({
-                text: pageValue.toString(),
-                iconURL: iconURL.toString(), 
-                contentFormatType: ContentFormatType.text
+                text: pageValue,
+                iconURL: iconURL, 
+                contentFormatType: ContentFormatType.text,
+                selectionId: tileSelectionId,
+                get isSelected(): boolean{
+                    return this.selectionId &&
+                    selectionIdKeys &&
+                    selectionIdKeys.indexOf(this.selectionId.getKey() as string) > -1
+                }
             });
-        }
 
-        console.log("about to call rendre...")
+        }   
+
+        shapesCollection.formatSettings.tile = this.visualSettings.tile
+       
+
+        console.log("about to call render...")
         shapesCollection.render()
-
+        
         // let objects: powerbi.VisualObjectInstancesToPersist = getObjectsToPersist(this.visualSettings)
         // if (objects.merge.length != 0)
         //     this.host.persistProperties(objects);
@@ -295,7 +313,7 @@ export class Visual implements IVisual {
                     }                   
                 }
                 if(categories){
-                    this.visualSettings.layout.buttonLayout = enums.Button_Layout.grid
+                    this.visualSettings.layout.buttonLayout = enums.Tile_Layout.grid
                     this.visualSettings.layout.rowLength = measures.length + 1
                 }
                 break

@@ -1,6 +1,5 @@
 import { propertyStateName, propertyStatesInput, propertyStatesOutput } from './interfaces'
 import * as enums from "./enums"
-import { ProcessedVisualSettings } from "./processedvisualsettings";
 import powerbi from "powerbi-visuals-api";
 import { VisualSettings } from './settings';
 
@@ -119,36 +118,6 @@ export function levelProperties(propertyStates: propertyStatesInput): propertySt
     }
 }
 
-export function addFilters(defs: d3.Selection<d3.BaseType, any, any, any>, pvs: ProcessedVisualSettings): void {
-    let filter = defs.append("filter")
-        .attr("id", "filter" + pvs.i)
-    if (pvs.settings.effects.shadow) {
-        filter
-            .append("feDropShadow")
-            .attr("dx", pvs.shadowDirectionCoords.x * pvs.shadowDistance)
-            .attr("dy", pvs.shadowDirectionCoords.y * pvs.shadowDistance)
-            .attr("stdDeviation", pvs.shadowStrength)
-            .attr("flood-color", pvs.shadowColor)
-            .attr("flood-opacity", pvs.shadowTransparency)
-            .attr("result", "dropshadow")
-    }
-
-    if (pvs.settings.effects.glow) {
-        filter
-            .append("feDropShadow")
-            .attr("dx", 0)
-            .attr("dy", 0)
-            .attr("stdDeviation", pvs.glowStrength)
-            .attr("flood-color", pvs.glowColor)
-            .attr("flood-opacity", pvs.glowTransparency)
-            .attr("result", "glow")
-
-    }
-
-    let feMerge = filter.append("feMerge")
-    feMerge.append("feMergeNode").attr("in", "dropshadow")
-    feMerge.append("feMergeNode").attr("in", "glow")
-}
 
 export function round(n, p?): number{
     let x = p ? Math.pow(10, p) : 100

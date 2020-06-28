@@ -28,38 +28,41 @@
 
 import { dataViewObjectsParser } from "powerbi-visuals-utils-dataviewutils";
 import DataViewObjectsParser = dataViewObjectsParser.DataViewObjectsParser;
-
+import * as TileCollectionFormatSettings from "./TilesCollection/FormatSettings"
 import * as enums from "./enums"
 
 
-export class ButtonSettings {
-  public state : enums.State = enums.State.all;
-  public hover: boolean = false
+// export class TileSettings {
+//   public state : enums.State = enums.State.all;
+//   public hover: boolean = false
   
-  public colorA: string = "";
-  public colorS: string = "#252423";
-  public colorU: string = "#252423";
-  public colorH: string = "#252423";
+//   public colorA: string = "";
+//   public colorS: string = "#00f";
+//   public colorU: string = "#00f";
+//   public colorH: string = "#00f";
 
-  public strokeA: string = "";
-  public strokeS: string = "#000";
-  public strokeU: string = "#000";
-  public strokeH: string = "#000"
+//   public strokeA: string = "";
+//   public strokeS: string = "#000";
+//   public strokeU: string = "#000";
+//   public strokeH: string = "#000"
 
-  public strokeWidthA: number = null;
-  public strokeWidthS: number = 0;
-  public strokeWidthU: number = 0;
-  public strokeWidthH: number = 0;
+//   public strokeWidthA: number = null;
+//   public strokeWidthS: number = 0;
+//   public strokeWidthU: number = 0;
+//   public strokeWidthH: number = 0;
 
-  public transparencyA: number = null;
-  public transparencyS: number = 0;
-  public transparencyU: number = 0;
-  public transparencyH: number = 0;
+//   public transparencyA: number = null;
+//   public transparencyS: number = 0;
+//   public transparencyU: number = 0;
+//   public transparencyH: number = 0;
+// }
+export class TileSettings extends TileCollectionFormatSettings.TileSettings{
+    public state : enums.State = enums.State.all;
 }
 
 export class TextSettings{
   public state : enums.State = enums.State.all;
-  public hover: boolean = false
+  public hoverStyling: boolean = false
 
   public colorA: string = "";
   public colorS: string = "#fff";
@@ -101,7 +104,7 @@ export class TextSettings{
 export class IconSettings{
   public icons: boolean = false;
   public state : enums.State = enums.State.all;
-  public hover: boolean = false
+  public hoverStyling: boolean = false
 
   public placementA: enums.Icon_Placement = null;
   public placementS: enums.Icon_Placement = enums.Icon_Placement.left;
@@ -135,7 +138,7 @@ export class IconSettings{
 }
 
 export class LayoutSettings{
-  public buttonShape: enums.Button_Shape = enums.Button_Shape.rectangle
+  public tileShape: enums.Tile_Shape = enums.Tile_Shape.rectangle
   
   public parallelogramAngle: number = 80
   public chevronAngle: number = 60
@@ -144,11 +147,11 @@ export class LayoutSettings{
   public tab_cutCornersLength: number = 20
   public tab_cutCornerLength: number = 20
 
-  public sizingMethod: enums.Button_Sizing_Method = enums.Button_Sizing_Method.uniform;
-  public buttonWidth: number = 150;
-  public buttonHeight: number = 75;
-  public buttonAlignment: enums.Align = enums.Align.left
-  public buttonLayout: enums.Button_Layout = enums.Button_Layout.horizontal;
+  public sizingMethod: enums.Tile_Sizing_Method = enums.Tile_Sizing_Method.uniform;
+  public tileWidth: number = 150;
+  public tileHeight: number = 75;
+  public tileAlignment: enums.Align = enums.Align.left
+  public tileLayout: enums.Tile_Layout = enums.Tile_Layout.horizontal;
   public rowLength: number = 2;
   public padding: number = 10;
 }
@@ -156,7 +159,7 @@ export class LayoutSettings{
 export class EffectsSettings{
   public shapeRoundedCornerRadius: number = 0 
   public state : enums.State = enums.State.all;
-  public hover: boolean = false
+  public hoverStyling: boolean = false
 
   public shadow: boolean = false;
 
@@ -205,7 +208,7 @@ export class EffectsSettings{
 
 export class ContentSettings{
   public multiselect: boolean = false
-  public source: enums.Content_Source = enums.Content_Source.databound
+  public source: enums.ContentSource = enums.ContentSource.databound
 
   public n: number = 5
   public icons: boolean = false
@@ -267,7 +270,7 @@ export class MeasuresSettings{
 }
 
 export class VisualSettings extends DataViewObjectsParser {
-  public button: ButtonSettings = new ButtonSettings();
+  public tile: TileSettings = new TileSettings();
   public text: TextSettings = new TextSettings();
   public icon: IconSettings = new IconSettings();
   public layout: LayoutSettings = new LayoutSettings();

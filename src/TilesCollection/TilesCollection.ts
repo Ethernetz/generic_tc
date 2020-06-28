@@ -122,33 +122,19 @@ export class TilesCollection {
             covers.select("path")
                 .attr("d", function (d) { return d.shapePath })
                 .style("fill-opacity", function (d) { return 0 })
-                .on('mouseover', (d, i) => {
-                    
+                .on('mouseover', (d, i, n) => {
+                    d.onTileMouseover(d, i, n)
                 })
-                .on('mouseout', (d, i) => {
-                    
+                .on('mouseout', (d, i, n) => {
+                    d.onTileMouseout(d, i, n)
                 })
-                .on('click', (d, i) => {
-                   
+                .on('click', (d, i, n) => {
+                    d.onTileClick(d, i, n)
                 })
-
-
-
     }
 
     public createTile(i): Tile{
-        return new Tile(i, this.tilesData, this.formatSettings)
+        return new Tile(this, i, this.tilesData, this.formatSettings)
     }
 
 }
-
-
-export class ShapesCollection extends TilesCollection{
-    public createTile(i): Tile{
-        return new Shape(i, this.tilesData, this.formatSettings)
-    }
-}
-
-export class Shape extends Tile{
-}
-
