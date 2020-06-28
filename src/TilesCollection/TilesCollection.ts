@@ -11,21 +11,21 @@ export class TilesCollection {
     tilesData: TileData[] = [];
     viewport: Viewport;
     container: Selection<SVGElement>;
+    tiles: Tile[] = []
     
     public render(): void {
         this.formatSettings.viewport = this.viewport
 
-        let tiles: Tile[] = []
         
         for (let i = 0; i < this.tilesData.length; i++) {
-            tiles.push(this.createTile(i))
+            this.tiles.push(this.createTile(i))
         }
 
         this.container.selectAll("defs").remove();
         this.container.append("defs")
         let defs = this.container.selectAll("defs")
         let filters = defs
-            .selectAll("filter").data(tiles)
+            .selectAll("filter").data(this.tiles)
             .enter()
             .append("filter")
             .attr("id", d=>{return "filter"+d.i})
@@ -48,7 +48,7 @@ export class TilesCollection {
             .attr("flood-opacity", d=>{return d.glowTransparency})
             .attr("result", "glow")
 
-        let feMerge = filters.data(tiles).append("feMerge")
+        let feMerge = filters.data(this.tiles).append("feMerge")
             feMerge.append("feMergeNode").attr("in", "dropshadow")
             feMerge.append("feMergeNode").attr("in", "glow")
         
@@ -57,7 +57,7 @@ export class TilesCollection {
                 .attr("class", "handle")
                 .append("path")
                 .attr("d", "M 0 0 l 6 12 l -12 0 z")
-                .attr("fill", "#f2c811")
+                .attr("fill", "#FFD700")
                 .style("stroke", "#252423")
                 .style("stroke-width", 0.5)
             defs.append("g")
@@ -65,7 +65,7 @@ export class TilesCollection {
                 .attr("class", "handle")
                 .append("path")
                 .attr("d", "M 0 0 l -12 6 l 0 -12 z")
-                .attr("fill", "#f2c811")
+                .attr("fill", "#FFD700")
                 .style("stroke", "#252423")
                 .style("stroke-width", 0.5)
 
@@ -76,7 +76,7 @@ export class TilesCollection {
         //     return !nodes[i].classList.contains(this.formatSettings.layout.tileShape)
         // }).remove()
 
-        let tileContainer = this.container.selectAll('.tileContainer').data(tiles)
+        let tileContainer = this.container.selectAll('.tileContainer').data(this.tiles)
         tileContainer.exit().remove()
         tileContainer = tileContainer.enter().append('g')
             .attr("class", function (d) { return "tileContainer " + d.tileShape  + d.tileData.text})
@@ -84,7 +84,7 @@ export class TilesCollection {
         tileContainer.append('path').attr("class", "stroke")
         
 
-        tileContainer = this.container.selectAll('.tileContainer').data(tiles)
+        tileContainer = this.container.selectAll('.tileContainer').data(this.tiles)
         tileContainer.select(".fill")
             .attr("d", function (d) {return d.shapePath })
             .attr("fill", function (d) { return d.tileFill })
@@ -97,7 +97,7 @@ export class TilesCollection {
             .style("stroke-width", function (d) { return d.tileStrokeWidth })
 
 
-        let contentFO = this.container.selectAll('.contentFO').data(tiles)
+        let contentFO = this.container.selectAll('.contentFO').data(this.tiles)
         contentFO.exit().remove()
         contentFO.enter()
             .append('foreignObject')
@@ -109,7 +109,7 @@ export class TilesCollection {
             .append("xhtml:div")
             .attr("class", "contentContainer")
         
-        contentFO = this.container.selectAll('.contentFO').data(tiles)
+        contentFO = this.container.selectAll('.contentFO').data(this.tiles)
             .attr("height", function (d) { return d.contentFOHeight })
             .attr("width", function (d) { return d.contentFOWidth })
             .attr("x", function (d) { return d.contentFOXPos })
@@ -132,12 +132,12 @@ export class TilesCollection {
 
 
 
-            let covers = this.container.selectAll('.cover').data(tiles)
+            let covers = this.container.selectAll('.cover').data(this.tiles)
             covers.exit().remove()
             covers.enter().append('g')
                 .attr("class", "cover " + this.formatSettings.layout.tileShape)
                 .append("path")
-            covers = this.container.selectAll('.cover').data(tiles)
+            covers = this.container.selectAll('.cover').data(this.tiles)
             covers.select("path")
                 .attr("d", function (d) { return d.shapePath })
                 .style("fill-opacity", function (d) { return 0 })

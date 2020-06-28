@@ -13,6 +13,9 @@
 //         .call(styleHandle)
 // }
 
+import { Tile } from "./TilesCollection/Tile"
+import { IconPlacement } from "./TilesCollection/enums"
+
 // function styleHandle(selection) {
 //     selection.attr("fill", "#f2c811")
 //         .style("stroke", "#252423")
@@ -78,18 +81,18 @@
 //         .style("text-align", function (d) { return d.textAlign })
 // }
 
-// export function styleText(selection) {
-//     selection.select('.textContainer')
-//         .style("opacity", function (d: ProcessedVisualSettings) { return d.textareaIsFocused ? 0 : d.textFillOpacity })
-//         .style("font-size", function (d) { return d.fontSize + "pt" })
-//         .style("font-family", function (d) { return d.fontFamily })
-//         .style("color", function (d) { return d.textFill })
-//     selection.select('.measureContainer')
-//         .style("opacity", function (d: ProcessedVisualSettings) { return d.measureTextFillOpacity })
-//         .style("font-size", function (d: ProcessedVisualSettings) { return d.measureFontSize + "pt" })
-//         .style("font-family", function (d: ProcessedVisualSettings) { return d.measureFontFamily })
-//         .style("color", function (d: ProcessedVisualSettings) { return d.measureTextFill })
-// }
+export function styleText(selection) {
+    selection.select('.textContainer')
+        .style("opacity", function (d: Tile) { return /*d.textareaIsFocused*/ false ? 0 : d.textFillOpacity })
+        .style("font-size", function (d: Tile) { return d.fontSize + "pt" })
+        .style("font-family", function (d: Tile) { return d.fontFamily })
+        .style("color", function (d: Tile) { return d.textFill })
+    // selection.select('.measureContainer')
+    //     .style("opacity", function (d: Tile) { return d.measureTextFillOpacity })
+    //     .style("font-size", function (d: Tile) { return d.measureFontSize + "pt" })
+    //     .style("font-family", function (d: Tile) { return d.measureFontFamily })
+    //     .style("color", function (d: Tile) { return d.measureTextFill })
+}
 
 // export function showOnlyTextBorder(selection) {
     
@@ -108,23 +111,23 @@
 //     .call(sizeTextArea)
 // }
 
-// export function sizeTextContainer(selection) {
-//     if (selection.data()[0].icons) {
-//         selection
-//         if (selection.data()[0].iconPlacement == enums.Icon_Placement.left) {
-//             selection
-//                 .style("maxWidth", (d: ProcessedVisualSettings) => { return d.maxInlineTextWidth + 'px'})
-//                 .style("display", "inline-block")
-//                 .style("verticalAlign", "middle")
-//                 .style("width", (d: ProcessedVisualSettings) => {return d.textWidth + "px" })
-//                 .style("height", (d: ProcessedVisualSettings) => { return d.textHeight + 1 + 'px'})
-//         } else {
-//             selection
-//                 .style("width", (d: ProcessedVisualSettings) => { return d.widthSpaceForText + 'px'})
-//                 .style("height", (d: ProcessedVisualSettings) => { return d.textContainerHeight +'px'})
-//         }
-//     }
-// }
+export function sizeTextContainer(selection) {
+    if (selection.data()[0].icons) {
+        selection
+        if (selection.data()[0].iconPlacement == IconPlacement.left) {
+            selection
+                .style("maxWidth", (d: Tile) => { return d.maxInlineTextWidth + 'px'})
+                .style("display", "inline-block")
+                .style("verticalAlign", "middle")
+                .style("width", (d: Tile) => {return d.boundedTextWidth + "px" })
+                .style("height", (d: Tile) => { return d.boundedTextHeight + 1 + 'px'})
+        } else {
+            selection
+                .style("width", (d: Tile) => { return d.widthSpaceForText + 'px'})
+                .style("height", (d: Tile) => { return d.textContainerHeight +'px'})
+        }
+    }
+}
 
 // export function styleTextArea(selection) {
 //     selection
@@ -146,12 +149,12 @@
 //         .html((d) => { return d.text })
 // }
 
-// export function makeTextTransparent(selection){
-//     selection.select(".text")
-//         .style("opacity", 0)
-//     selection.select(".icon")
-//         .style("opacity", 0)
-// }
+export function makeTextTransparent(selection){
+    selection.select(".text")
+        .style("opacity", 0)
+    selection.select(".icon")
+        .style("opacity", 0)
+}
 
 // function sizeTextArea(selection) {
 //     selection

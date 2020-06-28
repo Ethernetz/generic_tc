@@ -68,32 +68,25 @@ import { ContentFormatType } from "./TilesCollection/enums";
 export class Visual implements IVisual {
     private target: HTMLElement;
     public selectionManager: ISelectionManager;
-    private selectionManagerUnbound: SelectionManagerUnbound
+    public selectionManagerUnbound: SelectionManagerUnbound
     private selectionManagerHover: ISelectionManager;
     private selectionIds: any = {};
     public host: IVisualHost;
-    private isEventUpdate: boolean = false;
+
     private visualSettings: VisualSettings;
     private selectionIdBuilder: ISelectionIdBuilder;
 
-    private datapoints: Datapoint[];
     private svg: Selection<SVGElement>;
     private container: Selection<SVGElement>;
-    private hoveredIdKey: string;
-    private hoveredIndexUnbound: number;
-
     public hoveredIndex: number
 
     public shiftFired: boolean = false
 
 
-
-
-
     constructor(options: VisualConstructorOptions) {
         this.selectionIdBuilder = options.host.createSelectionIdBuilder();
         this.selectionManager = options.host.createSelectionManager();
-        this, this.selectionManagerUnbound = new SelectionManagerUnbound()
+        this.selectionManagerUnbound = new SelectionManagerUnbound()
         this.selectionManagerHover = options.host.createSelectionManager();
         this.host = options.host;
         this.svg = d3.select(options.element)
@@ -244,30 +237,44 @@ export class Visual implements IVisual {
         let dataView = options.dataViews[0]
         let categories: powerbi.DataViewCategoryColumn[] = dataView.categorical.categories;
         let selectionIdKeys: string[] = (this.selectionManager.getSelectionIds() as powerbi.visuals.ISelectionId[]).map(x => x.getKey()) as string[]
+        
+        
+        // //DATA BOUND
+        // for (let i = 0; i < categories[0].values.length; i++) {
+        //     let pageValue: string = categories[0].values[i].toString();
+        //     let iconURL: string =  categories[1] ? categories[1].values[i].toString() : null;
+        //     let tileSelectionId = this.host.createSelectionIdBuilder()
+        //                 .withCategory(categories[0], i)
+        //                 .createSelectionId();
+        //     genericsCollection.tilesData.push({
+        //         text: pageValue,
+        //         iconURL: iconURL, 
+        //         contentFormatType: ContentFormatType.text,
+        //         selectionId: tileSelectionId,
+        //         get isSelected(): boolean{
+        //             return this.selectionId &&
+        //             selectionIdKeys &&
+        //             selectionIdKeys.indexOf(this.selectionId.getKey() as string) > -1
+        //         },
+        //         isHovered: this.hoveredIndex == i
+        //     });
+
+        // }
+
+        //FIXED TEXT
         for (let i = 0; i < categories[0].values.length; i++) {
-            let pageValue: string = categories[0].values[i].toString();
-            let iconURL: string =  categories[1] ? categories[1].values[i].toString() : null;
-            let tileSelectionId = this.host.createSelectionIdBuilder()
-                        .withCategory(categories[0], i)
-                        .createSelectionId();
             genericsCollection.tilesData.push({
-                text: pageValue,
-                iconURL: iconURL, 
+                text: this.visualSettings.content['text' + (i + 1)],
+                iconURL: this.visualSettings.content.icons ? this.visualSettings.content['icon' + (i + 1)] : "", 
                 contentFormatType: ContentFormatType.text,
-                selectionId: tileSelectionId,
-                get isSelected(): boolean{
-                    return this.selectionId &&
-                    selectionIdKeys &&
-                    selectionIdKeys.indexOf(this.selectionId.getKey() as string) > -1
-                },
-                // get isHovered(): boolean{
-                //     console.log(this.h)
-                //     return this.hoveredIndex == i
-                // }
+                isSelected: this.selectionManagerUnbound.getSelectionIndexes().indexOf(i) > -1,
                 isHovered: this.hoveredIndex == i
             });
 
-        }   
+        }
+        
+        
+
         genericsCollection.render()
         
         // let objects: powerbi.VisualObjectInstancesToPersist = getObjectsToPersist(this.visualSettings)

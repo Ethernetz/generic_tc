@@ -177,7 +177,6 @@ export class Tile {
     get tileWidth(): number {
         switch (this.formatSettings.layout.sizingMethod) {
             case TileSizingType.uniform:
-                console.log(this.totalTileHPadding, this.alterHorizontalPadding)
                 return (this.containerWidth - this.totalTileHPadding) / (this.rowLength)
             case TileSizingType.fixed:
                 return this.formatSettings.layout.tileWidth

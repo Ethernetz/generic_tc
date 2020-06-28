@@ -1,4 +1,5 @@
 import {State} from './enums'
+import { format } from 'powerbi-visuals-utils-formattingutils/lib/src/valueFormatter';
 export function calculateWordDimensions(text: string, fontFamily: string, fontSize: string, widthType?: string, maxWidth?: string): { width: number, height: number } {
     var div = document.createElement('div');
     div.style.fontFamily = fontFamily
@@ -22,10 +23,11 @@ export function getMatchingStateProperty(state: State, formatObj: any, propBase:
     switch(state){
         case State.selected:
             return formatObj[propBase + 'S']
+        case State.hovered:
+            if(formatObj.hoverStyling)
+                return formatObj[propBase + 'H']
         case State.unselected:
             return formatObj[propBase + 'U']
-        case State.hovered:
-            return formatObj[propBase + 'H']
     }
 }
 
