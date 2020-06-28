@@ -71,7 +71,7 @@ export class Visual implements IVisual {
     private selectionManagerUnbound: SelectionManagerUnbound
     private selectionManagerHover: ISelectionManager;
     private selectionIds: any = {};
-    private host: IVisualHost;
+    public host: IVisualHost;
     private isEventUpdate: boolean = false;
     private visualSettings: VisualSettings;
     private selectionIdBuilder: ISelectionIdBuilder;
@@ -84,7 +84,7 @@ export class Visual implements IVisual {
 
     public hoveredIndex: number
 
-    private shiftFired: boolean = false
+    public shiftFired: boolean = false
 
 
 

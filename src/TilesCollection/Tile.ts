@@ -6,6 +6,7 @@ import {getMatchingStateProperty, calculateWordDimensions} from './functions'
 import { Shape, Rectangle, Parallelogram, Chevron, Ellipse, Pentagon, Hexagon, Tab_RoundedCorners, Tab_CutCorners, Tab_CutCorner, ChevronVertical, ParallelogramVertical } from "./shapes"
 import { BaseType } from 'd3'
 import { TilesCollection } from './TilesCollection'
+import { Handle } from '../interfaces'
 export class Tile {
     collection: TilesCollection
     i: number;
@@ -260,6 +261,9 @@ export class Tile {
     get shapeStrokePath(): string {
         return this.shape.strokePath
     }
+    get handles(): Handle[] {
+            return this.shape.handles
+        }
     get alterHorizontalPadding(): number {
         switch (this.tileShape) {
             case TileShape.parallelogram:
@@ -289,6 +293,7 @@ export class Tile {
     get contentFOYPos(): number {
         return this.shape.contentFODims.yPos
     }
+    
 
 
 

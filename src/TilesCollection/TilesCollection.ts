@@ -2,6 +2,8 @@ import {Viewport} from './interfaces'
 import { FormatSettings } from './FormatSettings'
 import { TileData } from './TileData'
 import { Tile } from './Tile'
+import * as d3 from 'd3';
+import { BaseType } from 'd3';
 
 type Selection<T extends d3.BaseType> = d3.Selection<T, any, any, any>;
 export class TilesCollection {
@@ -49,6 +51,23 @@ export class TilesCollection {
         let feMerge = filters.data(tiles).append("feMerge")
             feMerge.append("feMergeNode").attr("in", "dropshadow")
             feMerge.append("feMergeNode").attr("in", "glow")
+        
+            defs.append("g")
+                .attr("id", "handleHorizontal")
+                .attr("class", "handle")
+                .append("path")
+                .attr("d", "M 0 0 l 6 12 l -12 0 z")
+                .attr("fill", "#f2c811")
+                .style("stroke", "#252423")
+                .style("stroke-width", 0.5)
+            defs.append("g")
+                .attr("id", "handleVertical")
+                .attr("class", "handle")
+                .append("path")
+                .attr("d", "M 0 0 l -12 6 l 0 -12 z")
+                .attr("fill", "#f2c811")
+                .style("stroke", "#252423")
+                .style("stroke-width", 0.5)
 
 
         
@@ -131,10 +150,22 @@ export class TilesCollection {
                 .on('click', (d, i, n) => {
                     d.onTileClick(d, i, n)
                 })
+
+
+                d3.select("body")
+                .on("keydown", () => {
+                    if (d3.event.shiftKey)
+                        this.onShift()
+                })
+                .on("keyup", () => {
+                    if (d3.event.keyCode == 16)
+                        this.onShiftUp()
+                })
     }
 
     public createTile(i): Tile{
         return new Tile(this, i, this.tilesData, this.formatSettings)
     }
-
+    onShift(){} 
+    onShiftUp(){} 
 }
