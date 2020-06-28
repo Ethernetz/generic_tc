@@ -62,6 +62,7 @@ import { styleTitleFO, styleTitleTable, styleTitleTableCell, constructTitleFamil
 
 
 import {TilesCollection, ShapesCollection} from './TilesCollection/TilesCollection'
+import { ContentFormatType } from "./TilesCollection/enums";
 
 export class Visual implements IVisual {
     private target: HTMLElement;
@@ -225,10 +226,13 @@ export class Visual implements IVisual {
         this.visualSettings = VisualSettings.parse(options.dataViews[0]) as VisualSettings
         let dataView = options.dataViews[0]
         let categories: powerbi.DataViewCategoryColumn[] = dataView.categorical.categories;
-        for (let categoryIndex = 0; categoryIndex < categories[0].values.length; categoryIndex++) {
-            let pageValue: powerbi.PrimitiveValue = categories[0].values[categoryIndex];
+        for (let i = 0; i < categories[0].values.length; i++) {
+            let pageValue: powerbi.PrimitiveValue = categories[0].values[i];
+            let iconURL: powerbi.PrimitiveValue =  categories[1] ? categories[1].values[i] : null;
             shapesCollection.tilesData.push({
-                text: pageValue.toString()
+                text: pageValue.toString(),
+                iconURL: iconURL.toString(), 
+                contentFormatType: ContentFormatType.text
             });
         }
 

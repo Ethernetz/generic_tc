@@ -60,7 +60,7 @@ export class TilesCollection {
         let tileContainer = this.container.selectAll('.tileContainer').data(tiles)
         tileContainer.exit().remove()
         tileContainer = tileContainer.enter().append('g')
-            .attr("class", function (d) { console.log("entered a tilecontainer");return "tileContainer " + d.tileShape  + d.tileData.text})
+            .attr("class", function (d) { return "tileContainer " + d.tileShape  + d.tileData.text})
         tileContainer.append('path').attr("class", "fill")
         tileContainer.append('path').attr("class", "stroke")
         
@@ -82,7 +82,7 @@ export class TilesCollection {
         contentFO.exit().remove()
         contentFO.enter()
             .append('foreignObject')
-            .attr("class", function (d) { console.log("entered a contentFO");return "contentFO " + d.tileShape })
+            .attr("class", function (d) { return "contentFO " + d.tileShape })
             .append("xhtml:div")
             .attr("class", "contentTable")
             .append("xhtml:div")

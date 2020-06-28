@@ -1,7 +1,7 @@
 import {Viewport} from './interfaces'
 import {FormatSettings} from './FormatSettings'
 import {TileData} from './TileData'
-import {State, TileSizingType, TileLayoutType, AlignmentType, TileShape, Direction, ContentFormatType} from './enums'
+import {State, TileSizingType, TileLayoutType, AlignmentType, TileShape, Direction, ContentFormatType, IconPlacement} from './enums'
 import {getMatchingStateProperty, calculateWordDimensions} from './functions'
 import { Shape, Rectangle, Parallelogram, Chevron, Ellipse, Pentagon, Hexagon, Tab_RoundedCorners, Tab_CutCorners, Tab_CutCorner, ChevronVertical, ParallelogramVertical } from "../shapes"
 export class Tile {
@@ -99,6 +99,10 @@ export class Tile {
     get widthSpaceForText(): number {
         return this.contentContainerWidth - 2 * this.textHmargin
     }
+    get widthSpaceForAllText(): number {
+        console.log("this is it",this.viewport.width, this.rowLength*(2*this.textHmargin), this.totalTileHPadding, this.effectSpace )
+        return this.viewport.width - this.rowLength*(2*this.textHmargin) - this.totalTileHPadding - this.effectSpace
+    }
     get inlineTextWidth(): number {
         return calculateWordDimensions(this.text, this.fontFamily, this.fontSize + "pt").width
     }
@@ -109,23 +113,34 @@ export class Tile {
         return calculateWordDimensions(this.text as string, this.fontFamily, this.fontSize + "pt", this.textContainerWidthType, (this.maxInlineTextWidth) + 'px').height;
     }
 
+    get beforeInRowText(): string[]{
+        return this.rowText.slice(0, this.indexInRow)
+    }
+    get beforeInRowTextWidth(): number{
+        return calculateWordDimensions(this.beforeInRowText.join(""), this.fontFamily, this.fontSize + "pt").width
+    }
+
     get textContainerWidthType(): string {
-        return 'auto'
-        // return this.inlineTextWidth + 2 * this.textHmargin + this.iconHmargin >= Math.floor(this.maxInlineTextWidth) && this.settings.icon.icons ? 'min-content' : 'auto'
+        // return 'auto'
+        // console.log(this.i, this.inlineTextWidth + 2 * this.textHmargin >= Math.floor(this.maxInlineTextWidth) )
+        console.log(this.i, this.inlineTextWidth, this.maxInlineTextWidth)
+        return this.inlineTextWidth + 2 * this.textHmargin >= Math.floor(this.maxInlineTextWidth) 
+                && this.tileData.contentFormatType == ContentFormatType.text_icon
+                && this.iconPlacement == IconPlacement.left
+                ? 'min-content' : 'auto'
     }
     
-    // get textContainerHeight(): number {
-    //     return ProcessedVisualSettings.maxTextHeight + this.textBmargin
-    // }
+    get textContainerHeight(): number {
+        return this.boundedTextHeight + this.textBmargin
+    }
     get contentContainerWidth(): number{
         return this.shape.contentFODims.width
     }
     get widthTakenByIcon(): number{
-        // if (this.formatSettings.icon.icons && this.iconPlacement == enums.Icon_Placement.left)
-        //     w -= this.iconWidth + this.iconHmargin
-        return 0
+        return this.iconWidth + this.iconHmargin
     }
     get maxInlineTextWidth(): number {
+        console.log(this.widthSpaceForText, this.widthTakenByIcon)
         return this.widthSpaceForText - this.widthTakenByIcon
     }
 
@@ -163,9 +178,26 @@ export class Tile {
                 return (this.containerWidth - this.totalTileHPadding) / (this.rowLength)
             case TileSizingType.fixed:
                 return this.formatSettings.layout.tileWidth
-            // case TileSizingType.dynamic:
-            //     let tileWidthScaleFactor = (this.inlineTextWidth / this.allTextWidth) * this.rowLength
-            //     return ((this.containerWidth - this.tileHPadding * (this.rowLength - 1)) / (this.rowLength)) * tileWidthScaleFactor
+            case TileSizingType.dynamic:
+                // console.log("getting dynamic width")
+                // console.log(this.i, (this.inlineTextWidth / this.allTextWidth) * this.rowLength)
+                // let tileWidthScaleFactor = (this.inlineTextWidth / this.allTextWidth) * this.rowLength
+                // return (this.containerWidth - this.totalTileHPadding) / (this.rowLength)*tileWidthScaleFactor
+                console.log("getting w ")
+                let scaleFactor = 1
+                // if(this.allTextWidth > this.widthSpaceForAllText)
+                //     scaleFactor = this.widthSpaceForAllText/this.allTextWidth
+                
+
+                // let allTextUnusedWidth = this.allTextWidth - this.widthSpaceForAllText
+                // console.log("wdth space for text", this.widthSpaceForAllText)
+                // console.log("atuw", allTextUnusedWidth)                
+                // let margin = allTextUnusedWidth/this.rowLength
+                // console.log("getting width", this.i, (this.inlineTextWidth + margin)*scaleFactor)
+                // return (this.inlineTextWidth + margin)*scaleFactor
+                return this.inlineTextWidth
+
+                // return ((this.containerWidth - this.tileHPadding * (this.rowLength - 1)) / (this.rowLength)) * tileWidthScaleFactor
         }
     }
     get tileHeight(): number {
@@ -192,8 +224,13 @@ export class Tile {
                 }
             case TileSizingType.uniform:
                 return this.indexInRow * (this.tileWidth + this.tileHPadding) + this.effectSpace / 2
-            // case TileSizingType.dynamic:
-            //     return this.widthSoFar + this.indexInRow * (this.tileHPadding) + this.effectSpace / 2
+            case TileSizingType.dynamic:
+
+                // let prevTileScaleFactor = (this.beforeInRowTextWidth/this.allTextWidth) * this.rowLength
+                // let widthSoFar = this.indexInRow*this.tileHPadding + (this.containerWidth - this.totalTileHPadding) / (this.rowLength)*prevTileScaleFactor
+                // let widthSoFar = this.beforeInRowTextWidth + this.tileHPadding*this.indexInRow + this.effectSpace/2
+                // console.log("wdf", widthSoFar)
+                return this.beforeInRowTextWidth + this.indexInRow*(this.tileHPadding) + this.effectSpace / 2
         }
     }
     get tileYpos(): number {
@@ -344,7 +381,33 @@ export class Tile {
 
 
     
-
+    get iconURL(): string {
+        return this.tileData.iconURL
+    }
+    get iconWidth(): number {
+        return getMatchingStateProperty(this.currentState,this.formatSettings.icon, 'width')
+    }
+    get iconHmargin(): number {
+        return getMatchingStateProperty(this.currentState,this.formatSettings.icon, 'hmargin')
+    }
+    get iconTopMargin(): number {
+        return getMatchingStateProperty(this.currentState,this.formatSettings.icon, 'topMargin')
+    }
+    get iconBottomMargin(): number {
+        return getMatchingStateProperty(this.currentState,this.formatSettings.icon, 'bottomMargin')
+    }
+    get spaceForIcon(): number {
+        return this.contentFOWidth - this.iconHmargin
+    }
+    get iconPlacement(): IconPlacement {
+        return getMatchingStateProperty(this.currentState,this.formatSettings.icon, 'placement')
+    }
+    get iconHeight(): number {
+        return this.contentFOHeight - this.textContainerHeight - this.iconTopMargin - this.iconBottomMargin
+    }
+    get iconOpacity(): number {
+        return 1 - getMatchingStateProperty(this.currentState,this.formatSettings.icon, 'transparency') / 100
+    }
 
 
 
@@ -393,51 +456,54 @@ export class Tile {
         textContainer.style.position = 'relative'
         textContainer.style.paddingLeft = this.textHmargin + 'px'
         textContainer.style.paddingRight = this.textHmargin + 'px'
-        // if (this.settings.icon.icons) {
-        //     if (this.iconPlacement == enums.Icon_Placement.left) {
-        //         textContainer.style.display = 'inline-block'
-        //         textContainer.style.verticalAlign = 'middle'
-        //         textContainer.style.width = this.textContainerWidthByIcon
-        //         textContainer.style.height = this.textHeight + 'px'
-        //         textContainer.style.maxWidth = this.maxInlineTextWidth + 'px'
-        //     } else {
-        //         textContainer.style.width = this.widthSpaceForText + 'px'
-        //         textContainer.style.height = this.textContainerHeight + 'px'
-        //     }
-        // }
-
         return textContainer
     }
 
-    // get img(): HTMLDivElement {
-    //     let img = this.auxillaryDivGeneric
-    //     img.className = 'icon'
-    //     img.style.backgroundImage = "url(" + this.iconURL + ")"
-    //     img.style.backgroundRepeat = 'no-repeat'
-    //     img.style.opacity = this.iconOpacity.toString()
-    //     if (this.iconPlacement == enums.Icon_Placement.left) {
-    //         img.style.minWidth = this.iconWidth + 'px'
-    //         img.style.height = this.iconWidth + 'px'
-    //         img.style.display = 'inline-block'
-    //         img.style.verticalAlign = 'middle'
-    //         img.style.marginRight = this.iconHmargin + 'px'
-    //         img.style.backgroundPosition = 'center center'
-    //         img.style.backgroundSize = 'contain'
-    //     } else {
-    //         img.style.maxWidth = this.spaceForIcon + 'px'
-    //         img.style.height = this.iconHeight + 'px'
-    //         img.style.backgroundSize = Math.min(this.iconWidth, this.spaceForIcon) + 'px '
-    //         img.style.margin = this.iconTopMargin + 'px ' + this.iconHmargin + 'px ' + this.iconBottomMargin + 'px '
-    //         if (this.iconPlacement == enums.Icon_Placement.above) {
-    //             img.style.backgroundPosition = 'center bottom'
-    //         } else {
-    //             img.style.backgroundPosition = 'center top'
-    //             img.style.position = 'absolute'
-    //             img.style.bottom = '0'
-    //         }
-    //     }
-    //     return img
-    // }
+    get textByIconContainer(): HTMLDivElement{
+        let textContainer = this.textContainer
+        if (this.iconPlacement == IconPlacement.left) {
+            textContainer.style.display = 'inline-block'
+            textContainer.style.verticalAlign = 'middle'
+            textContainer.style.width = this.textContainerWidthType
+            textContainer.style.height = this.boundedTextHeight + 'px'
+            textContainer.style.maxWidth = this.maxInlineTextWidth + 'px'
+        } else {
+            textContainer.style.width = this.widthSpaceForText + 'px'
+            textContainer.style.height = this.textContainerHeight + 'px'
+        }
+        return textContainer
+    }
+    
+
+    get img(): HTMLDivElement {
+        let img = document.createElement('div')
+        img.className = 'icon'
+        img.style.backgroundImage = "url(" + this.iconURL + ")"
+        img.style.backgroundRepeat = 'no-repeat'
+        img.style.opacity = this.iconOpacity.toString()
+        if (this.iconPlacement == IconPlacement.left) {
+            img.style.minWidth = this.iconWidth + 'px'
+            img.style.height = this.iconWidth + 'px'
+            img.style.display = 'inline-block'
+            img.style.verticalAlign = 'middle'
+            img.style.marginRight = this.iconHmargin + 'px'
+            img.style.backgroundPosition = 'center center'
+            img.style.backgroundSize = 'contain'
+        } else {
+            img.style.maxWidth = this.spaceForIcon + 'px'
+            img.style.height = this.iconHeight + 'px'
+            img.style.backgroundSize = Math.min(this.iconWidth, this.spaceForIcon) + 'px '
+            img.style.margin = this.iconTopMargin + 'px ' + this.iconHmargin + 'px ' + this.iconBottomMargin + 'px '
+            if (this.iconPlacement == IconPlacement.above) {
+                img.style.backgroundPosition = 'center bottom'
+            } else {
+                img.style.backgroundPosition = 'center top'
+                img.style.position = 'absolute'
+                img.style.bottom = '0'
+            }
+        }
+        return img
+    }
 
     // get measureValueContainer(): HTMLDivElement{
     //     let container = this.auxillaryDivGeneric
@@ -498,6 +564,32 @@ export class Tile {
     //     return titleContainer
     // }
 
+    get contentTextIconFormat(): HTMLDivElement{
+        let contentContainer = document.createElement('div')
+        contentContainer.className = "contentContainer"
+        
+        let text = this.textElement
+        text.textContent = this.text
+
+        let textContainer = this.textByIconContainer
+        textContainer.append(text)
+
+        if(this.iconPlacement == IconPlacement.left){
+            contentContainer.style.display = 'inline-block'
+            contentContainer.append(this.img, textContainer)
+        } else {
+            contentContainer.style.height = this.contentFOHeight + 'px'
+            contentContainer.style.maxHeight = this.contentFOHeight + 'px'
+            if (this.iconPlacement == IconPlacement.above)
+                contentContainer.append(this.img, textContainer)
+            else
+                contentContainer.append(textContainer, this.img)
+        }
+
+
+        return contentContainer
+    }
+
     get contentTextFormat(): HTMLDivElement{
         let contentContainer = document.createElement('div')
         contentContainer.className = "contentContainer"
@@ -517,8 +609,8 @@ export class Tile {
 
     get content(): HTMLDivElement {
         switch(this.tileData.contentFormatType){
-            case ContentFormatType.text:
-                return this.contentTextFormat
+            case ContentFormatType.text_icon:
+                return this.contentTextIconFormat
             default:
                 return this.contentTextFormat
         }

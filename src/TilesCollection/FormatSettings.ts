@@ -1,12 +1,12 @@
 import {Viewport} from './interfaces'
-import {AlignmentType, TileSizingType, TileLayoutType, TileShape, Direction} from './enums'
+import {AlignmentType, TileSizingType, TileLayoutType, TileShape, Direction, IconPlacement} from './enums'
 
 export class FormatSettings{
   public tile: TileSettings = new TileSettings();
   public text: TextSettings = new TextSettings();
   public layout: LayoutSettings = new LayoutSettings();
   public effect: EffectSettings = new EffectSettings();
-
+  public icon: IconSettings = new IconSettings();
   viewport: Viewport
 }
 
@@ -75,7 +75,7 @@ export class TileSettings {
   }
 
   export class LayoutSettings{
-    public tileShape: TileShape = TileShape.chevron
+    public tileShape: TileShape = TileShape.rectangle
     
     public parallelogramAngle: number = 80
     public chevronAngle: number = 60
@@ -141,4 +141,39 @@ export class TileSettings {
     public glowStrengthS: number = 2
     public glowStrengthU: number = 2
     public glowStrengthH: number = 2
+  }
+
+  export class IconSettings{
+    public icons: boolean = false;
+    public hoverStyling: boolean = false
+  
+    public placementA: IconPlacement = null;
+    public placementS: IconPlacement = IconPlacement.left;
+    public placementU: IconPlacement = IconPlacement.left;
+    public placementH: IconPlacement = IconPlacement.left;
+  
+    public widthA: number = null;
+    public widthS: number = 40;
+    public widthU: number = 40;
+    public widthH: number = 40;
+  
+    public hmarginA: number = null;
+    public hmarginS: number = 10;
+    public hmarginU: number = 10;
+    public hmarginH: number = 10;
+  
+    public topMarginA: number = null;
+    public topMarginS: number = 10;
+    public topMarginU: number = 10;
+    public topMarginH: number = 10;
+  
+    public bottomMarginA: number = null;
+    public bottomMarginS: number = 10;
+    public bottomMarginU: number = 10;
+    public bottomMarginH: number = 10;
+  
+    public transparencyA: number = null;
+    public transparencyS: number = 0;
+    public transparencyU: number = 0;
+    public transparencyH: number = 0;
   }
