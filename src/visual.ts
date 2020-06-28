@@ -55,7 +55,10 @@ import { SelectionManagerUnbound } from './SelectionManagerUnbound'
 
 type Selection<T extends d3.BaseType> = d3.Selection<T, any, any, any>;
 
-import * as enums from "./enums"
+// import * as enums from "./enums"
+import {AlignmentType, TileSizingType, TileLayoutType, TileShape, Direction, IconPlacement} from './TilesCollection/enums'
+import {ContentSource, State} from './enums'
+
 import { select, merge } from "d3";
 
 
@@ -110,22 +113,22 @@ export class Visual implements IVisual {
             for (let j = 0; j < groupedKeyNamesArr.length; j++) {
                 let groupedKeyNames: propertyStateName = groupedKeyNamesArr[j]
                 switch (settings[settingKey].state) {
-                    case enums.State.all:
+                    case State.all:
                         delete settings[settingKey][groupedKeyNames.selected]
                         delete settings[settingKey][groupedKeyNames.unselected]
                         delete settings[settingKey][groupedKeyNames.hover]
                         break
-                    case enums.State.selected:
+                    case State.selected:
                         delete settings[settingKey][groupedKeyNames.all]
                         delete settings[settingKey][groupedKeyNames.unselected]
                         delete settings[settingKey][groupedKeyNames.hover]
                         break
-                    case enums.State.unselected:
+                    case State.unselected:
                         delete settings[settingKey][groupedKeyNames.all]
                         delete settings[settingKey][groupedKeyNames.selected]
                         delete settings[settingKey][groupedKeyNames.hover]
                         break
-                    case enums.State.hover:
+                    case State.hover:
                         delete settings[settingKey][groupedKeyNames.all]
                         delete settings[settingKey][groupedKeyNames.selected]
                         delete settings[settingKey][groupedKeyNames.unselected]
@@ -149,14 +152,14 @@ export class Visual implements IVisual {
                     delete settings.effects[effectSettingsKeys[i]]
 
         switch (settings.content.source) {
-            case enums.ContentSource.databound:
+            case ContentSource.databound:
                 delete settings.content.n
                 for (let i = 1; i < 11; i++) {
                     delete settings.content['text' + i]
                     delete settings.content['icon' + i]
                 }
                 break
-            case enums.ContentSource.fixed:
+            case ContentSource.fixed:
                 for (let i = 10; i > settings.content.n; i--) {
                     delete settings.content['text' + i]
                     delete settings.content['icon' + i]
@@ -166,39 +169,39 @@ export class Visual implements IVisual {
                         delete settings.content['icon' + i]
                 break
         }
-        let iconPlacement = settings.icon[getCorrectPropertyStateName(settings.icon.state, 'placement')] as enums.Icon_Placement
-        if (iconPlacement == enums.Icon_Placement.left) {
+        let iconPlacement = settings.icon[getCorrectPropertyStateName(settings.icon.state, 'placement')] as IconPlacement
+        if (iconPlacement == IconPlacement.left) {
             delete settings.icon[getCorrectPropertyStateName(settings.icon.state, "topMargin")]
             delete settings.icon[getCorrectPropertyStateName(settings.icon.state, "bottomMargin")]
         }
-        if(!(settings.content.source != enums.ContentSource.measures && settings.icon.icons && iconPlacement == enums.Icon_Placement.above))
+        if(!(settings.content.source != ContentSource.measures && settings.icon.icons && iconPlacement == IconPlacement.above))
             delete settings.text[getCorrectPropertyStateName(settings.text.state, "bmargin")]
 
-        if (settings.layout.sizingMethod != enums.Tile_Sizing_Method.fixed) {
+        if (settings.layout.sizingMethod != TileSizingType.fixed) {
             delete settings.layout.tileWidth;
             delete settings.layout.tileHeight;
             delete settings.layout.tileAlignment;
         }
-        if (settings.layout.tileLayout != enums.Tile_Layout.grid) {
+        if (settings.layout.tileLayout != TileLayoutType.grid) {
             delete settings.layout.rowLength
         }
 
-        if (settings.layout.tileShape != enums.Tile_Shape.parallelogram) {
+        if (settings.layout.tileShape != TileShape.parallelogram) {
             delete settings.layout.parallelogramAngle
         }
-        if (settings.layout.tileShape != enums.Tile_Shape.chevron) {
+        if (settings.layout.tileShape != TileShape.chevron) {
             delete settings.layout.chevronAngle
         }
-        if (settings.layout.tileShape != enums.Tile_Shape.pentagon) {
+        if (settings.layout.tileShape != TileShape.pentagon) {
             delete settings.layout.pentagonAngle
         }
-        if (settings.layout.tileShape != enums.Tile_Shape.hexagon) {
+        if (settings.layout.tileShape != TileShape.hexagon) {
             delete settings.layout.hexagonAngle
         }
-        if (settings.layout.tileShape != enums.Tile_Shape.tab_cutCorners) {
+        if (settings.layout.tileShape != TileShape.tab_cutCorners) {
             delete settings.layout.tab_cutCornersLength
         }
-        if (settings.layout.tileShape != enums.Tile_Shape.tab_cutCorner) {
+        if (settings.layout.tileShape != TileShape.tab_cutCorner) {
             delete settings.layout.tab_cutCornerLength
         }
 
@@ -261,7 +264,7 @@ export class Visual implements IVisual {
         // if (objects.merge.length != 0)
         //     this.host.persistProperties(objects);
         /*switch (this.visualSettings.content.source) {
-            case enums.Content_Source.databound:
+            case Content_Source.databound:
                 for (let categoryIndex = 0; categoryIndex < categories[0].values.length; categoryIndex++) {
                     let pageValue: powerbi.PrimitiveValue = categories[0].values[categoryIndex];
                     let iconValue: powerbi.PrimitiveValue = categories[1] ? categories[1].values[categoryIndex] : null;
@@ -275,7 +278,7 @@ export class Visual implements IVisual {
                     });
                 }
                 break
-            case enums.Content_Source.fixed:
+            case Content_Source.fixed:
                 for (let i = 0; i < this.visualSettings.content.n; i++) {
                     (<DatapointFixed[]>this.datapoints).push({
                         value: this.visualSettings.content['text' + (i + 1)],
@@ -283,7 +286,7 @@ export class Visual implements IVisual {
                     });
                 }
                 break
-            case enums.Content_Source.measures:
+            case Content_Source.measures:
                 let dps: DatapointMeasures[][] = [[]]
                 for (let i = 0; i < measures.length; i++) {
                     let iValueFormatter = valueFormatter.create({ format: measures[i].source.format });
@@ -313,7 +316,7 @@ export class Visual implements IVisual {
                     }                   
                 }
                 if(categories){
-                    this.visualSettings.layout.buttonLayout = enums.Tile_Layout.grid
+                    this.visualSettings.layout.buttonLayout = Tile_Layout.grid
                     this.visualSettings.layout.rowLength = measures.length + 1
                 }
                 break
@@ -377,10 +380,10 @@ export class Visual implements IVisual {
                     return
                 covers.select(".handle").remove()
                 switch (this.visualSettings.content.source) {
-                    case enums.Content_Source.databound:
+                    case Content_Source.databound:
                         this.hoveredIdKey = d.selectionId.getKey()
                         break
-                    case enums.Content_Source.fixed:
+                    case Content_Source.fixed:
                         this.hoveredIndexUnbound = i
                         break
                 }
@@ -391,10 +394,10 @@ export class Visual implements IVisual {
                     return
                 covers.select(".handle").remove()
                 switch (this.visualSettings.content.source) {
-                    case enums.Content_Source.databound:
+                    case Content_Source.databound:
                         this.hoveredIdKey = null
                         break
-                    case enums.Content_Source.fixed:
+                    case Content_Source.fixed:
                         this.hoveredIndexUnbound = null
                         break
                 }
@@ -404,10 +407,10 @@ export class Visual implements IVisual {
                 if (this.shiftFired)
                     return
                 switch (this.visualSettings.content.source) {
-                    case enums.Content_Source.databound:
+                    case Content_Source.databound:
                         this.selectionManager.select(d.selectionId, this.visualSettings.content.multiselect)
                         break
-                    case enums.Content_Source.fixed:
+                    case Content_Source.fixed:
                         this.selectionManagerUnbound.select(i, this.visualSettings.content.multiselect)
                         break
                 }
@@ -435,7 +438,7 @@ export class Visual implements IVisual {
                         .call(dragHandle);
 
 
-                    if (this.visualSettings.content.source != enums.Content_Source.fixed)
+                    if (this.visualSettings.content.source != Content_Source.fixed)
                         return
                     covers.append('foreignObject')
                         .attr("class", function (d) { return "coverTitle " + d.buttonShape })

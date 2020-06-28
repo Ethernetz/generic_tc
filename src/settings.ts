@@ -29,11 +29,12 @@
 import { dataViewObjectsParser } from "powerbi-visuals-utils-dataviewutils";
 import DataViewObjectsParser = dataViewObjectsParser.DataViewObjectsParser;
 import * as TileCollectionFormatSettings from "./TilesCollection/FormatSettings"
-import * as enums from "./enums"
-
+// import * as enums from "./enums"
+import {AlignmentType, TileSizingType, TileLayoutType, TileShape, Direction, IconPlacement} from './TilesCollection/enums'
+import {ContentSource, State} from './enums'
 
 // export class TileSettings {
-//   public state : enums.State = enums.State.all;
+//   public state : State = State.all;
 //   public hover: boolean = false
   
 //   public colorA: string = "";
@@ -57,11 +58,11 @@ import * as enums from "./enums"
 //   public transparencyH: number = 0;
 // }
 export class TileSettings extends TileCollectionFormatSettings.TileSettings{
-    public state : enums.State = enums.State.all;
+    public state : State = State.all;
 }
 
 export class TextSettings{
-  public state : enums.State = enums.State.all;
+  public state : State = State.all;
   public hoverStyling: boolean = false
 
   public colorA: string = "";
@@ -69,10 +70,10 @@ export class TextSettings{
   public colorU: string = "#fff";
   public colorH: string = "#fff";
 
-  public alignmentA: enums.Align = enums.Align.center;
-  public alignmentS: enums.Align = enums.Align.center;
-  public alignmentU: enums.Align = enums.Align.center;
-  public alignmentH: enums.Align = enums.Align.center;
+  public alignmentA: AlignmentType = AlignmentType.center;
+  public alignmentS: AlignmentType = AlignmentType.center;
+  public alignmentU: AlignmentType = AlignmentType.center;
+  public alignmentH: AlignmentType = AlignmentType.center;
 
   public fontSizeA: number = null;
   public fontSizeS: number = 14;
@@ -103,13 +104,13 @@ export class TextSettings{
 
 export class IconSettings{
   public icons: boolean = false;
-  public state : enums.State = enums.State.all;
+  public state : State = State.all;
   public hoverStyling: boolean = false
 
-  public placementA: enums.Icon_Placement = null;
-  public placementS: enums.Icon_Placement = enums.Icon_Placement.left;
-  public placementU: enums.Icon_Placement = enums.Icon_Placement.left;
-  public placementH: enums.Icon_Placement = enums.Icon_Placement.left;
+  public placementA: IconPlacement = null;
+  public placementS: IconPlacement = IconPlacement.left;
+  public placementU: IconPlacement = IconPlacement.left;
+  public placementH: IconPlacement = IconPlacement.left;
 
   public widthA: number = null;
   public widthS: number = 40;
@@ -138,7 +139,7 @@ export class IconSettings{
 }
 
 export class LayoutSettings{
-  public tileShape: enums.Tile_Shape = enums.Tile_Shape.rectangle
+  public tileShape: TileShape = TileShape.rectangle
   
   public parallelogramAngle: number = 80
   public chevronAngle: number = 60
@@ -147,18 +148,18 @@ export class LayoutSettings{
   public tab_cutCornersLength: number = 20
   public tab_cutCornerLength: number = 20
 
-  public sizingMethod: enums.Tile_Sizing_Method = enums.Tile_Sizing_Method.uniform;
+  public sizingMethod: TileSizingType = TileSizingType.uniform;
   public tileWidth: number = 150;
   public tileHeight: number = 75;
-  public tileAlignment: enums.Align = enums.Align.left
-  public tileLayout: enums.Tile_Layout = enums.Tile_Layout.horizontal;
+  public tileAlignment: AlignmentType = AlignmentType.left
+  public tileLayout: TileLayoutType = TileLayoutType.horizontal;
   public rowLength: number = 2;
   public padding: number = 10;
 }
 
 export class EffectsSettings{
   public shapeRoundedCornerRadius: number = 0 
-  public state : enums.State = enums.State.all;
+  public state : State = State.all;
   public hoverStyling: boolean = false
 
   public shadow: boolean = false;
@@ -173,10 +174,10 @@ export class EffectsSettings{
   public shadowTransparencyU: number = 70
   public shadowTransparencyH: number = 70
 
-  public shadowDirectionA: enums.Direction = null
-  public shadowDirectionS: enums.Direction = enums.Direction.bottom_right
-  public shadowDirectionU: enums.Direction = enums.Direction.bottom_right
-  public shadowDirectionH: enums.Direction = enums.Direction.bottom_right
+  public shadowDirectionA: Direction = null
+  public shadowDirectionS: Direction = Direction.bottom_right
+  public shadowDirectionU: Direction = Direction.bottom_right
+  public shadowDirectionH: Direction = Direction.bottom_right
 
   public shadowDistanceA: number = null
   public shadowDistanceS: number = 2
@@ -208,7 +209,7 @@ export class EffectsSettings{
 
 export class ContentSettings{
   public multiselect: boolean = false
-  public source: enums.ContentSource = enums.ContentSource.databound
+  public source: ContentSource = ContentSource.databound
 
   public n: number = 5
   public icons: boolean = false
@@ -235,7 +236,7 @@ export class ContentSettings{
 }
 
 export class MeasuresSettings{
-  public state : enums.State = enums.State.all;
+  public state : State = State.all;
   public hover: boolean = false
 
   public colorA: string = "";
@@ -243,10 +244,10 @@ export class MeasuresSettings{
   public colorU: string = "#252423";
   public colorH: string = "#252423";
 
-  public alignmentA: enums.Align = enums.Align.center;
-  public alignmentS: enums.Align = enums.Align.center;
-  public alignmentU: enums.Align = enums.Align.center;
-  public alignmentH: enums.Align = enums.Align.center;
+  public alignmentA: AlignmentType = AlignmentType.center;
+  public alignmentS: AlignmentType = AlignmentType.center;
+  public alignmentU: AlignmentType = AlignmentType.center;
+  public alignmentH: AlignmentType = AlignmentType.center;
 
   public fontSizeA: number = null;
   public fontSizeS: number = 45;
