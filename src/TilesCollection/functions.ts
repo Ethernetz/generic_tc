@@ -28,3 +28,10 @@ export function getMatchingStateProperty(state: State, formatObj: any, propBase:
             return formatObj[propBase + 'H']
     }
 }
+
+
+
+export function round(n, p?): number{
+    let x = p ? Math.pow(10, p) : 100
+    return Math.round(n*x) / x
+}

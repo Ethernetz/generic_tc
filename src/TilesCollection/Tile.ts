@@ -3,9 +3,8 @@ import {FormatSettings} from './FormatSettings'
 import {TileData} from './TileData'
 import {State, TileSizingType, TileLayoutType, AlignmentType, TileShape, Direction, ContentFormatType, IconPlacement} from './enums'
 import {getMatchingStateProperty, calculateWordDimensions} from './functions'
-import { Shape, Rectangle, Parallelogram, Chevron, Ellipse, Pentagon, Hexagon, Tab_RoundedCorners, Tab_CutCorners, Tab_CutCorner, ChevronVertical, ParallelogramVertical } from "../shapes"
+import { Shape, Rectangle, Parallelogram, Chevron, Ellipse, Pentagon, Hexagon, Tab_RoundedCorners, Tab_CutCorners, Tab_CutCorner, ChevronVertical, ParallelogramVertical } from "./shapes"
 import { BaseType } from 'd3'
-import { ShapesCollection } from '../ShapesCollection'
 import { TilesCollection } from './TilesCollection'
 export class Tile {
     collection: TilesCollection

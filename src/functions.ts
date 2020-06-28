@@ -117,9 +117,3 @@ export function levelProperties(propertyStates: propertyStatesInput): propertySt
                     (propertyStates.hover == null || propertyStates.hover == _hover))
     }
 }
-
-
-export function round(n, p?): number{
-    let x = p ? Math.pow(10, p) : 100
-    return Math.round(n*x) / x
-}

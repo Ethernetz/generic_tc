@@ -50,7 +50,7 @@ import * as d3 from "d3";
 // import { ProcessedVisualSettings } from "./processedvisualsettings";
 
 import { Datapoint, propertyStateName, stateIds, Handle, DatapointDatabound, DatapointFixed, DatapointMeasures } from './interfaces'
-import { getPropertyStateNameArr, getObjectsToPersist, levelProperties, getCorrectPropertyStateName } from './functions'
+import { getPropertyStateNameArr, getObjectsToPersist, getCorrectPropertyStateName } from './functions'
 import { SelectionManagerUnbound } from './SelectionManagerUnbound'
 
 type Selection<T extends d3.BaseType> = d3.Selection<T, any, any, any>;
@@ -62,7 +62,7 @@ import {ContentSource} from './enums'
 import { select, merge } from "d3";
 
 
-import {ShapesCollection} from './ShapesCollection'
+import {GenericsCollection} from './GenericsCollection'
 import { ContentFormatType } from "./TilesCollection/enums";
 
 export class Visual implements IVisual {
@@ -215,7 +215,6 @@ export class Visual implements IVisual {
 
         
         let objects: powerbi.VisualObjectInstancesToPersist = getObjectsToPersist(this.visualSettings)
-        console.log(objects)
         if (objects.merge.length != 0)
             this.host.persistProperties(objects);
         
@@ -225,21 +224,22 @@ export class Visual implements IVisual {
             .style('height', options.viewport.height)
 
 
-        let shapesCollection = new ShapesCollection()
+        let genericsCollection = new GenericsCollection()
 
-        shapesCollection.formatSettings.tile = this.visualSettings.tile
-        shapesCollection.formatSettings.text = this.visualSettings.text
-        shapesCollection.formatSettings.icon = this.visualSettings.icon
-        shapesCollection.formatSettings.layout = this.visualSettings.layout
+        genericsCollection.formatSettings.tile = this.visualSettings.tile
+        genericsCollection.formatSettings.text = this.visualSettings.text
+        genericsCollection.formatSettings.icon = this.visualSettings.icon
+        genericsCollection.formatSettings.layout = this.visualSettings.layout
+        genericsCollection.formatSettings.effect = this.visualSettings.effects
 
 
-        shapesCollection.container = this.container
-        shapesCollection.viewport = {
+        genericsCollection.container = this.container
+        genericsCollection.viewport = {
             height: options.viewport.height,
             width:options.viewport.width,
         }
-        shapesCollection.visual = this
-        shapesCollection.options = options
+        genericsCollection.visual = this
+        genericsCollection.options = options
         let dataView = options.dataViews[0]
         let categories: powerbi.DataViewCategoryColumn[] = dataView.categorical.categories;
         let selectionIdKeys: string[] = (this.selectionManager.getSelectionIds() as powerbi.visuals.ISelectionId[]).map(x => x.getKey()) as string[]
@@ -249,7 +249,7 @@ export class Visual implements IVisual {
             let tileSelectionId = this.host.createSelectionIdBuilder()
                         .withCategory(categories[0], i)
                         .createSelectionId();
-            shapesCollection.tilesData.push({
+            genericsCollection.tilesData.push({
                 text: pageValue,
                 iconURL: iconURL, 
                 contentFormatType: ContentFormatType.text,
@@ -262,10 +262,7 @@ export class Visual implements IVisual {
             });
 
         }   
-       
-
-        console.log("about to call render...")
-        shapesCollection.render()
+        genericsCollection.render()
         
         // let objects: powerbi.VisualObjectInstancesToPersist = getObjectsToPersist(this.visualSettings)
         // if (objects.merge.length != 0)
