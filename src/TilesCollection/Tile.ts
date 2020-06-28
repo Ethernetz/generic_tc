@@ -100,7 +100,6 @@ export class Tile {
         return this.contentContainerWidth - 2 * this.textHmargin
     }
     get widthSpaceForAllText(): number {
-        console.log("this is it",this.viewport.width, this.rowLength*(2*this.textHmargin), this.totalTileHPadding, this.effectSpace )
         return this.viewport.width - this.rowLength*(2*this.textHmargin) - this.totalTileHPadding - this.effectSpace
     }
     get inlineTextWidth(): number {
@@ -117,13 +116,14 @@ export class Tile {
         return this.rowText.slice(0, this.indexInRow)
     }
     get beforeInRowTextWidth(): number{
+        if(this.beforeInRowText.length == 0)
+            return 0
         return calculateWordDimensions(this.beforeInRowText.join(""), this.fontFamily, this.fontSize + "pt").width
     }
 
     get textContainerWidthType(): string {
         // return 'auto'
         // console.log(this.i, this.inlineTextWidth + 2 * this.textHmargin >= Math.floor(this.maxInlineTextWidth) )
-        console.log(this.i, this.inlineTextWidth, this.maxInlineTextWidth)
         return this.inlineTextWidth + 2 * this.textHmargin >= Math.floor(this.maxInlineTextWidth) 
                 && this.tileData.contentFormatType == ContentFormatType.text_icon
                 && this.iconPlacement == IconPlacement.left
@@ -140,7 +140,6 @@ export class Tile {
         return this.iconWidth + this.iconHmargin
     }
     get maxInlineTextWidth(): number {
-        console.log(this.widthSpaceForText, this.widthTakenByIcon)
         return this.widthSpaceForText - this.widthTakenByIcon
     }
 
@@ -179,26 +178,15 @@ export class Tile {
             case TileSizingType.fixed:
                 return this.formatSettings.layout.tileWidth
             case TileSizingType.dynamic:
-                // console.log("getting dynamic width")
-                // console.log(this.i, (this.inlineTextWidth / this.allTextWidth) * this.rowLength)
-                // let tileWidthScaleFactor = (this.inlineTextWidth / this.allTextWidth) * this.rowLength
-                // return (this.containerWidth - this.totalTileHPadding) / (this.rowLength)*tileWidthScaleFactor
-                console.log("getting w ")
-                let scaleFactor = 1
-                // if(this.allTextWidth > this.widthSpaceForAllText)
-                //     scaleFactor = this.widthSpaceForAllText/this.allTextWidth
-                
-
-                // let allTextUnusedWidth = this.allTextWidth - this.widthSpaceForAllText
-                // console.log("wdth space for text", this.widthSpaceForAllText)
-                // console.log("atuw", allTextUnusedWidth)                
-                // let margin = allTextUnusedWidth/this.rowLength
-                // console.log("getting width", this.i, (this.inlineTextWidth + margin)*scaleFactor)
-                // return (this.inlineTextWidth + margin)*scaleFactor
-                return this.inlineTextWidth
-
-                // return ((this.containerWidth - this.tileHPadding * (this.rowLength - 1)) / (this.rowLength)) * tileWidthScaleFactor
+                if(this.indexInRow == this.rowLength-1)
+                    return this.containerWidth - this.tileXpos
+                return this.inlineTextWidth + this.dynamicExtraWidthPerTile
         }
+    }
+    get dynamicExtraWidthPerTile(): number{
+        let textSpaceRequired = this.allTextWidth + this.textHmargin*2*this.rowLength + this.totalTileHPadding
+        let spaceRemaining = Math.max(0, this.containerWidth - textSpaceRequired)
+        return spaceRemaining/this.rowLength
     }
     get tileHeight(): number {
         
@@ -225,12 +213,7 @@ export class Tile {
             case TileSizingType.uniform:
                 return this.indexInRow * (this.tileWidth + this.tileHPadding) + this.effectSpace / 2
             case TileSizingType.dynamic:
-
-                // let prevTileScaleFactor = (this.beforeInRowTextWidth/this.allTextWidth) * this.rowLength
-                // let widthSoFar = this.indexInRow*this.tileHPadding + (this.containerWidth - this.totalTileHPadding) / (this.rowLength)*prevTileScaleFactor
-                // let widthSoFar = this.beforeInRowTextWidth + this.tileHPadding*this.indexInRow + this.effectSpace/2
-                // console.log("wdf", widthSoFar)
-                return this.beforeInRowTextWidth + this.indexInRow*(this.tileHPadding) + this.effectSpace / 2
+                return this.beforeInRowTextWidth + this.dynamicExtraWidthPerTile*this.indexInRow + this.effectSpace/2 + this.indexInRow*(this.tileHPadding)
         }
     }
     get tileYpos(): number {

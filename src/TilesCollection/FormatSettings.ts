@@ -75,7 +75,7 @@ export class TileSettings {
   }
 
   export class LayoutSettings{
-    public tileShape: TileShape = TileShape.rectangle
+    public tileShape: TileShape = TileShape.chevron
     
     public parallelogramAngle: number = 80
     public chevronAngle: number = 60
@@ -84,7 +84,7 @@ export class TileSettings {
     public tab_cutCornersLength: number = 20
     public tab_cutCornerLength: number = 20
   
-    public sizingMethod: TileSizingType = TileSizingType.uniform;
+    public sizingMethod: TileSizingType = TileSizingType.dynamic;
     public tileWidth: number = 150;
     public tileHeight: number = 75;
     public tileAlignment: AlignmentType = AlignmentType.left
