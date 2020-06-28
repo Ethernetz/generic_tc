@@ -3,7 +3,6 @@ import { FormatSettings } from './FormatSettings'
 import { TileData } from './TileData'
 import { Tile } from './Tile'
 import * as d3 from 'd3';
-import { BaseType } from 'd3';
 
 type Selection<T extends d3.BaseType> = d3.Selection<T, any, any, any>;
 export class TilesCollection {

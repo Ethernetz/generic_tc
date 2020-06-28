@@ -1,5 +1,4 @@
 import {State} from './enums'
-import { format } from 'powerbi-visuals-utils-formattingutils/lib/src/valueFormatter';
 export function calculateWordDimensions(text: string, fontFamily: string, fontSize: string, widthType?: string, maxWidth?: string): { width: number, height: number } {
     var div = document.createElement('div');
     div.style.fontFamily = fontFamily

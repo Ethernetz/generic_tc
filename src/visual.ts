@@ -49,7 +49,7 @@ import { valueFormatter } from "powerbi-visuals-utils-formattingutils"
 import * as d3 from "d3";
 // import { ProcessedVisualSettings } from "./processedvisualsettings";
 
-import { Datapoint, propertyStateName, stateIds, Handle, DatapointDatabound, DatapointFixed, DatapointMeasures } from './interfaces'
+import { propertyStateName} from './interfaces'
 import { getPropertyStateNameArr, getObjectsToPersist, getCorrectPropertyStateName } from './functions'
 import { SelectionManagerUnbound } from './SelectionManagerUnbound'
 

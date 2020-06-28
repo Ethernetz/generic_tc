@@ -2,20 +2,6 @@ import powerbi from "powerbi-visuals-api";
 import {State} from './TilesCollection/enums'
 import { SelectionManagerUnbound } from "./SelectionManagerUnbound";
 
-export type Datapoint = DatapointDatabound | DatapointFixed | DatapointMeasures
-
-export interface DatapointDatabound extends DatapointCommon{
-    iconValue: powerbi.PrimitiveValue,
-    selectionId: powerbi.visuals.ISelectionId,
-}
-
-export interface DatapointFixed extends DatapointCommon{
-    iconValue: powerbi.PrimitiveValue,
-}
-
-export interface DatapointMeasures extends DatapointCommon{
-    measureValue: powerbi.PrimitiveValue
-}
 
 interface DatapointCommon {
     value: powerbi.PrimitiveValue,
@@ -48,12 +34,6 @@ export interface containerProperties{
     yPos: number,
     width: number,
     height: number
-}
-
-export interface stateIds{
-    hoveredIdKey: string,
-    selectionManagerUnbound: SelectionManagerUnbound,
-    hoveredIndexUnbound: number
 }
 
 export interface Handle{

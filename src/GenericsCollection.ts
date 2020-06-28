@@ -12,7 +12,7 @@ import { Shape } from "./TilesCollection/shapes";
 import { Handle } from "./interfaces";
 import { select } from "d3";
 
-import { sizeTextContainer, styleText, makeTextTransparent } from './d3calls'
+// import { sizeTextContainer, styleText, makeTextTransparent } from './d3calls'
 
 export class GenericsCollection extends TilesCollection {
     visual: Visual
