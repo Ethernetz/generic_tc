@@ -420,16 +420,19 @@ export class Tile {
         let text = document.createElement('span')
         text.className = 'text'
         text.style.width = this.boundedTextWidth + 'px'
-        // if (this.icons) {
-        //     if (this.iconPlacement != enums.Icon_Placement.left) {
-        //         // text.style.position = 'absolute'
-        //         // text.style.right = '0'
-        //     }
-        //     if (this.iconPlacement == enums.Icon_Placement.below) {
-        //         text.style.bottom = '0'
-        //     }
-        // }
 
+        return text
+    }
+
+    get textElementByIcon(): HTMLSpanElement {
+        let text = this.textElement
+        if (this.iconPlacement != IconPlacement.left) {
+            text.style.position = 'absolute'
+            text.style.right = '0'
+        }
+        if (this.iconPlacement == IconPlacement.below) {
+            text.style.bottom = '0'
+        }
         return text
     }
 
@@ -487,65 +490,6 @@ export class Tile {
         }
         return img
     }
-
-    // get measureValueContainer(): HTMLDivElement{
-    //     let container = this.auxillaryDivGeneric
-    //     container.className = 'measureContainer'
-    //     let text = document.createElement('span')
-    //     text.className = 'measureText'
-    //     text.textContent = this.isMeasures(this.datapoint) ? this.datapoint.measureValue as string : null
-    //     container.append(text)
-    //     return container
-    // }
-
-    // get auxillaryDivGeneric(): HTMLDivElement {
-    //     let aux = document.createElement('div')
-        
-    //     return aux
-    // }
-
-    // get showAuxillary(): boolean {
-    //     if(this.settings.content.source == enums.Content_Source.measures)
-    //         return true
-    //     else
-    //         return this.settings.icon.icons
-    // }
-
-    // get auxillaryDiv(): HTMLDivElement {
-    //     if(this.settings.content.source == enums.Content_Source.measures)
-    //         return this.measureValueContainer
-    //     else
-    //         return this.img
-    // }
-
-    // get titleContent(): HTMLDivElement {
-    //     let titleContainer = document.createElement('div')
-    //     titleContainer.className = "titleContainer"
-
-    //     let text = this.textElement
-    //     let textContainer = this.textContainer
-    //     textContainer.append(text)
-    //     if (this.showAuxillary) {
-    //         let aux = this.auxillaryDiv
-    //         if(this.icons){
-    //             if (this.iconPlacement == enums.Icon_Placement.left) {
-    //                 titleContainer.style.display = 'inline-block'
-    //                 titleContainer.append(aux, textContainer)
-    //             } else {
-    //                 titleContainer.style.height = this.titleFOHeight + 'px'
-    //                 titleContainer.style.maxHeight = this.titleFOHeight + 'px'
-    //                 if (this.iconPlacement == enums.Icon_Placement.above)
-    //                     titleContainer.append(aux, textContainer)
-    //                 else
-    //                     titleContainer.append(textContainer, aux)
-    //             }
-    //         } else {
-    //             titleContainer.append(aux, textContainer)
-    //         }                
-    //     } else
-    //         titleContainer.append(textContainer)
-    //     return titleContainer
-    // }
 
     get contentTextIconFormat(): HTMLDivElement{
         let contentContainer = document.createElement('div')

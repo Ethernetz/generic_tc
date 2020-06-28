@@ -113,6 +113,27 @@ export class TilesCollection {
 
 
 
+            let covers = this.container.selectAll('.cover').data(tiles)
+            covers.exit().remove()
+            covers.enter().append('g')
+                .attr("class", "cover " + this.formatSettings.layout.tileShape)
+                .append("path")
+            covers = this.container.selectAll('.cover').data(tiles)
+            covers.select("path")
+                .attr("d", function (d) { return d.shapePath })
+                .style("fill-opacity", function (d) { return 0 })
+                .on('mouseover', (d, i) => {
+                    
+                })
+                .on('mouseout', (d, i) => {
+                    
+                })
+                .on('click', (d, i) => {
+                   
+                })
+
+
+
     }
 
     public createTile(i): Tile{
