@@ -1,5 +1,5 @@
 import powerbi from "powerbi-visuals-api";
-import * as enums from "./enums"
+import {State} from './TilesCollection/enums'
 import { SelectionManagerUnbound } from "./SelectionManagerUnbound";
 
 export type Datapoint = DatapointDatabound | DatapointFixed | DatapointMeasures
@@ -36,7 +36,7 @@ export interface propertyStateValue {
 }
 
 export interface propertyStatesInput extends propertyStateValue {
-    state: enums.State
+    state: State
 }
 
 export interface propertyStatesOutput extends propertyStateValue {

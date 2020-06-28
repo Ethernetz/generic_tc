@@ -1,5 +1,5 @@
 import {Viewport} from './interfaces'
-import {AlignmentType, TileSizingType, TileLayoutType, TileShape, Direction, IconPlacement} from './enums'
+import {AlignmentType, TileSizingType, TileLayoutType, TileShape, Direction, IconPlacement, State} from './enums'
 
 export class FormatSettings{
   public tile: TileSettings = new TileSettings();
@@ -11,12 +11,13 @@ export class FormatSettings{
 }
 
 export class TileSettings {
+    public state: State = State.all
     public hoverStyling: boolean = false
 
     public colorA: string = "";
-    public colorS: string = "#252423";
-    public colorU: string = "#252423";
-    public colorH: string = "#252423";
+    public colorS: string = "#262222";
+    public colorU: string = "#262222";
+    public colorH: string = "#262222";
   
     public strokeA: string = "";
     public strokeS: string = "#000";
@@ -35,6 +36,7 @@ export class TileSettings {
   }
 
   export class TextSettings{
+    public state: State = State.all
     public hoverStyling: boolean = false
 
     public colorA: string = "";
@@ -75,7 +77,7 @@ export class TileSettings {
   }
 
   export class LayoutSettings{
-    public tileShape: TileShape = TileShape.chevron
+    public tileShape: TileShape = TileShape.rectangle
     
     public parallelogramAngle: number = 80
     public chevronAngle: number = 60
@@ -84,7 +86,7 @@ export class TileSettings {
     public tab_cutCornersLength: number = 20
     public tab_cutCornerLength: number = 20
   
-    public sizingMethod: TileSizingType = TileSizingType.dynamic;
+    public sizingMethod: TileSizingType = TileSizingType.uniform;
     public tileWidth: number = 150;
     public tileHeight: number = 75;
     public tileAlignment: AlignmentType = AlignmentType.left
@@ -94,6 +96,7 @@ export class TileSettings {
   }
 
   export class EffectSettings{
+    public state: State = State.all
     public shapeRoundedCornerRadius: number = 0 
     public hoverStyling: boolean = false
   
@@ -145,6 +148,7 @@ export class TileSettings {
 
   export class IconSettings{
     public icons: boolean = false;
+    public state: State = State.all
     public hoverStyling: boolean = false
   
     public placementA: IconPlacement = null;

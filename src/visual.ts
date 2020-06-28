@@ -56,8 +56,8 @@ import { SelectionManagerUnbound } from './SelectionManagerUnbound'
 type Selection<T extends d3.BaseType> = d3.Selection<T, any, any, any>;
 
 // import * as enums from "./enums"
-import {AlignmentType, TileSizingType, TileLayoutType, TileShape, Direction, IconPlacement} from './TilesCollection/enums'
-import {ContentSource, State} from './enums'
+import {TileSizingType, TileLayoutType, TileShape, IconPlacement, State} from './TilesCollection/enums'
+import {ContentSource} from './enums'
 
 import { select, merge } from "d3";
 
@@ -128,7 +128,7 @@ export class Visual implements IVisual {
                         delete settings[settingKey][groupedKeyNames.selected]
                         delete settings[settingKey][groupedKeyNames.hover]
                         break
-                    case State.hover:
+                    case State.hovered:
                         delete settings[settingKey][groupedKeyNames.all]
                         delete settings[settingKey][groupedKeyNames.selected]
                         delete settings[settingKey][groupedKeyNames.unselected]
@@ -212,6 +212,8 @@ export class Visual implements IVisual {
         if (!(options && options.dataViews && options.dataViews[0]))
             return
         this.visualSettings = VisualSettings.parse(options.dataViews[0]) as VisualSettings
+
+        
         let objects: powerbi.VisualObjectInstancesToPersist = getObjectsToPersist(this.visualSettings)
         console.log(objects)
         if (objects.merge.length != 0)
@@ -224,6 +226,13 @@ export class Visual implements IVisual {
 
 
         let shapesCollection = new ShapesCollection()
+
+        shapesCollection.formatSettings.tile = this.visualSettings.tile
+        shapesCollection.formatSettings.text = this.visualSettings.text
+        shapesCollection.formatSettings.icon = this.visualSettings.icon
+        shapesCollection.formatSettings.layout = this.visualSettings.layout
+
+
         shapesCollection.container = this.container
         shapesCollection.viewport = {
             height: options.viewport.height,
@@ -253,8 +262,6 @@ export class Visual implements IVisual {
             });
 
         }   
-
-        shapesCollection.formatSettings.tile = this.visualSettings.tile
        
 
         console.log("about to call render...")

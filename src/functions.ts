@@ -1,5 +1,5 @@
 import { propertyStateName, propertyStatesInput, propertyStatesOutput } from './interfaces'
-import * as enums from "./enums"
+import {State} from './TilesCollection/enums'
 import powerbi from "powerbi-visuals-api";
 import { VisualSettings } from './settings';
 
@@ -39,15 +39,15 @@ export function getPropertyStateNames(propBase: string): propertyStateName{
         }
 }
 
-export function getCorrectPropertyStateName(state: enums.State, propBase: string): string{
+export function getCorrectPropertyStateName(state: State, propBase: string): string{
     switch(state){
-        case enums.State.all:
+        case State.all:
             return propBase+"A"
-        case enums.State.selected:
+        case State.selected:
             return propBase+"S"
-        case enums.State.unselected:
+        case State.unselected:
             return propBase + "U"
-        case enums.State.hover:
+        case State.hovered:
             return propBase + "H"
     }
 }
@@ -100,7 +100,7 @@ export function levelProperties(propertyStates: propertyStatesInput): propertySt
     let _allExists: boolean = typeof _all == 'number' ? _all >= 0 : _all && _all.length > 0
     let _selectedExists: boolean = typeof _selected == 'number' ? _selected >= 0 : _selected && _selected.length > 0
     let _nullValue = typeof _all == 'number' ? null : ""
-    if (propertyStates.state == enums.State.all && _allExists)
+    if (propertyStates.state == State.all && _allExists)
         _selected = _unselected = _hover = _all
     if (_selectedExists && _selected == _unselected)
         _all = _selected
