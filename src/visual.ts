@@ -73,7 +73,7 @@ export class Visual implements IVisual {
     private selectionIds: any = {};
     public host: IVisualHost;
 
-    private visualSettings: VisualSettings;
+    public visualSettings: VisualSettings;
     private selectionIdBuilder: ISelectionIdBuilder;
 
     private svg: Selection<SVGElement>;
