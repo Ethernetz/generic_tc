@@ -151,16 +151,21 @@ export class Visual implements IVisual {
                 for (let i = 1; i < 11; i++) {
                     delete settings.content['text' + i]
                     delete settings.content['icon' + i]
+                    delete settings.bgimg['img' + i]
                 }
-                break
+                
             case ContentSource.fixed:
                 for (let i = 10; i > settings.content.n; i--) {
                     delete settings.content['text' + i]
                     delete settings.content['icon' + i]
+                    delete settings.bgimg['img' + i]
                 }
                 if (!this.visualSettings.content.icons)
                     for (let i = 1; i < 11; i++)
                         delete settings.content['icon' + i]
+                if (!this.visualSettings.bgimg.bgimgs)
+                    for (let i = 1; i < 11; i++)
+                        delete settings.bgimg['img' + i]
                 break
         }
         let iconPlacement = settings.icon[getCorrectPropertyStateName(settings.icon.state, 'placement')] as IconPlacement
@@ -262,10 +267,11 @@ export class Visual implements IVisual {
         // }
 
         //FIXED TEXT
-        for (let i = 0; i < categories[0].values.length; i++) {
+        for (let i = 0; i < this.visualSettings.content.n; i++) {
             genericsCollection.tilesData.push({
                 text: this.visualSettings.content['text' + (i + 1)],
                 iconURL: this.visualSettings.content.icons ? this.visualSettings.content['icon' + (i + 1)] : "", 
+                bgimgURL: this.visualSettings.bgimg['img' + (i+1)],
                 contentFormatType: ContentFormatType.text,
                 isSelected: this.selectionManagerUnbound.getSelectionIndexes().indexOf(i) > -1,
                 isHovered: this.hoveredIndex == i

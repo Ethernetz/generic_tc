@@ -307,6 +307,9 @@ export class Tile {
     get filter(): string {
         return "url(#filter" + this.i + ")"
     }
+    get bgimg(): string {
+        return "url(#image" + this.i + ")"
+    }
 
     get shadow(): boolean{
         return this.formatSettings.effect.shadow
@@ -399,7 +402,12 @@ export class Tile {
         return 1 - getMatchingStateProperty(this.currentState,this.formatSettings.icon, 'transparency') / 100
     }
 
-
+    get bgImageURL(): string {
+        console.log("getting bgimurl", this.tileData.bgimgURL)
+        if(this.tileData.bgimgURL)
+            return this.tileData.bgimgURL
+        return ""
+    }
 
 
     //Tile data

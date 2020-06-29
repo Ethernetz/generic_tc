@@ -75,6 +75,20 @@ export class ContentSettings{
   public icon10: string = ""
 }
 
+export class BgImgSettings{
+  public bgimgs: boolean = false
+  public img1: string = ""
+  public img2: string = ""
+  public img3: string = ""
+  public img4: string = ""
+  public img5: string = ""
+  public img6: string = ""
+  public img7: string = ""
+  public img8: string = ""
+  public img9: string = ""
+  public img10: string = ""
+}
+
 export class MeasuresSettings{
   public state : State = State.all;
   public hover: boolean = false
@@ -117,5 +131,6 @@ export class VisualSettings extends DataViewObjectsParser {
   public layout: LayoutSettings = new LayoutSettings();
   public effects: EffectSettings = new EffectSettings();
   public content: ContentSettings = new ContentSettings();
+  public bgimg: BgImgSettings = new BgImgSettings();
   public measures: MeasuresSettings = new MeasuresSettings();
 }
