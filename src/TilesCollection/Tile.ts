@@ -460,6 +460,8 @@ export class Tile {
             textContainer.style.width = this.textContainerWidthType
             textContainer.style.height = this.boundedTextHeight + 'px'
             textContainer.style.maxWidth = this.maxInlineTextWidth + 'px'
+            textContainer.style.paddingLeft = 0 + 'px'
+            textContainer.style.paddingRight = 0 + 'px'
         } else {
             textContainer.style.width = this.widthSpaceForText + 'px'
             textContainer.style.height = this.textContainerHeight + 'px'
@@ -511,6 +513,8 @@ export class Tile {
         if(this.iconPlacement == IconPlacement.left){
             contentContainer.style.display = 'inline-block'
             contentContainer.append(this.img, textContainer)
+            contentContainer.style.paddingLeft = this.textHmargin + 'px'
+            contentContainer.style.paddingRight = this.textHmargin + 'px'
         } else {
             contentContainer.style.height = this.contentFOHeight + 'px'
             contentContainer.style.maxHeight = this.contentFOHeight + 'px'
