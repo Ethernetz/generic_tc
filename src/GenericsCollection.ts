@@ -160,11 +160,11 @@ export class Generic extends Tile {
 
     onTileMouseover() {
         this.visual.hoveredIndex = this.i
-        this.visual.update(this.collection.options)
+        // this.visual.update(this.collection.options)
     }
     onTileMouseout() {
         this.visual.hoveredIndex = null
-        this.visual.update(this.collection.options)
+        // this.visual.update(this.collection.options)
     }
 }
 

@@ -78,11 +78,10 @@ export class TilesCollection {
             .on('load', function(d) {
                 let img: d3.Selection<d3.BaseType, unknown, HTMLElement, any> = d3.select('.img' + d.i)
                 let imgElement: Element = img.node() as any //TODO make types more clear
-                console.log(imgElement.getBoundingClientRect()) 
                 let dims = d.getBgImgDims(imgElement.getBoundingClientRect())
-                console.log(dims)
-                img.attr("width", dims.width)
-                img.attr("height", dims.height)
+                img
+                    .attr("width", dims.width)
+                    .attr("height", dims.height)
 
                 // d.setImageWidth() 
            })

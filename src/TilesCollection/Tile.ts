@@ -193,7 +193,6 @@ export class Tile {
         return spaceRemaining/this.rowLength
     }
     get tileHeight(): number {
-        
         if(this.formatSettings.layout.sizingMethod == TileSizingType.fixed)
             return this.formatSettings.layout.tileHeight
         return (this.containerHeight - this.totalTileVPadding) / this.numRows
@@ -412,7 +411,6 @@ export class Tile {
     getBgImgDims(box: DOMRect): {width: number; height: number}{
         let tileRatio = this.tileWidth/this.tileHeight
         let imgRatio = box.width/box.height
-        console.log(tileRatio, imgRatio)
         if(tileRatio > imgRatio)
             return {
                 width: this.tileWidth,
