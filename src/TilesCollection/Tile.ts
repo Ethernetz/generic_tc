@@ -7,6 +7,7 @@ import { Shape, Rectangle, Parallelogram, Chevron, Ellipse, Pentagon, Hexagon, T
 import { BaseType } from 'd3'
 import { TilesCollection } from './TilesCollection'
 import { Handle } from '../interfaces'
+import * as d3 from 'd3'
 export class Tile {
     collection: TilesCollection
     i: number;
@@ -402,11 +403,26 @@ export class Tile {
         return 1 - getMatchingStateProperty(this.currentState,this.formatSettings.icon, 'transparency') / 100
     }
 
-    get bgImageURL(): string {
-        console.log("getting bgimurl", this.tileData.bgimgURL)
+    get bgImgURL(): string {
         if(this.tileData.bgimgURL)
             return this.tileData.bgimgURL
         return ""
+    }
+    
+    getBgImgDims(box: DOMRect): {width: number; height: number}{
+        let tileRatio = this.tileWidth/this.tileHeight
+        let imgRatio = box.width/box.height
+        console.log(tileRatio, imgRatio)
+        if(tileRatio > imgRatio)
+            return {
+                width: this.tileWidth,
+                height: box.height*this.tileWidth/box.width
+            }
+        else
+            return  {
+                width: box.width*this.tileHeight/box.height,
+                height: this.tileHeight
+            }
     }
 
 

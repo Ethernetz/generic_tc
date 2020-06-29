@@ -74,9 +74,19 @@ export class TilesCollection {
             .attr("width", 1)
             .attr("height", 1)
             .append("image")
-            .attr("xlink:href", d => {return d.bgImageURL})
-            .attr("width", d => {return d.tileWidth})
-            .attr("height", d => {return d.tileHeight})
+            .attr("class", (d)=>{return "img" + d.i})
+            .on('load', function(d) {
+                let img: d3.Selection<d3.BaseType, unknown, HTMLElement, any> = d3.select('.img' + d.i)
+                let imgElement: Element = img.node() as any //TODO make types more clear
+                console.log(imgElement.getBoundingClientRect()) 
+                let dims = d.getBgImgDims(imgElement.getBoundingClientRect())
+                console.log(dims)
+                img.attr("width", dims.width)
+                img.attr("height", dims.height)
+
+                // d.setImageWidth() 
+           })
+            .attr("xlink:href", d => {return d.bgImgURL})
 
         let feMerge = filters.data(this.tiles).append("feMerge")
             feMerge.append("feMergeNode").attr("in", "dropshadow")
@@ -104,7 +114,7 @@ export class TilesCollection {
         tileContainer = this.container.selectAll('.tileContainer').data(this.tiles)
         tileContainer.select(".fill")
             .attr("d", function (d) { return d.shapePath })
-            .attr("fill", function (d) { return d.bgImageURL ? d.bgimg : d.tileFill})
+            .attr("fill", function (d) { return d.bgImgURL ? d.bgimg : d.tileFill})
             .style("fill-opacity", function (d) { return d.tileFillOpacity })
             .style("filter", function (d) { return d.filter })
         tileContainer.select(".stroke")
